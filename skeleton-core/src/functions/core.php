@@ -51,7 +51,7 @@ function get_app_namespace()
 
     $composer_json_decode = json_decode(file_get_contents($composer_json_file), true);
 
-    $app_namespace = array_search("app", array_map(function($psr_4) {
+    $app_namespace = array_search("app/src", array_map(function($psr_4) {
         return trim($psr_4, "/");
     }, $composer_json_decode['autoload']['psr-4']));
 

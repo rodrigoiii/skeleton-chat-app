@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace SkeletonCore;
 
 class BaseController
 {
