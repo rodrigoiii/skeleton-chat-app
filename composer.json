@@ -20,12 +20,11 @@
 	},
 	"autoload": {
 	    "psr-4": {
-	        "App\\": "app/src/"
-
-            ,"SkeletonCore\\": "skeleton-core/src/classes"
+	        "App\\": "app/src/",
+            "SkeletonCore\\": "core/src/classes/"
 	    },
         "files": [
-            "skeleton-core/src/functions/autoload.php"
+            "core/src/functions/autoload.php"
         ]
 	},
 	"scripts": {
