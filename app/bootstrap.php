@@ -1,7 +1,7 @@
 <?php
 
 # create environment
-$dotEnv = SkeletonCore\App::createEnvironment();
+$dotEnv = Core\App::createEnvironment();
 $dotEnv->overload();
 $dotEnv->required("APP_NAME")->notEmpty();
 $dotEnv->required("APP_ENV")->allowedValues(["development", "production"]);
@@ -12,7 +12,7 @@ $dotEnv->required("DB_PASSWORD");
 $dotEnv->required("DB_NAME");
 
 # application instance
-$app = new SkeletonCore\App;
+$app = new Core\App;
 $app->loadDatabaseConnection();
 
 # load libraries

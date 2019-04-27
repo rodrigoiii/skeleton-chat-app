@@ -1,6 +1,6 @@
 <?php
 
-namespace SkeletonCore;
+namespace Core;
 
 use Illuminate\Database\Eloquent\Model;
 

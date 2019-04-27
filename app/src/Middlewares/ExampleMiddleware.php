@@ -4,7 +4,7 @@ namespace App\Middlewares;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use SkeletonCore\BaseMiddleware;
+use Core\BaseMiddleware;
 
 class ExampleMiddleware extends BaseMiddleware
 {

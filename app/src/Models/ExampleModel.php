@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use SkeletonCore\BaseModel;
+use Core\BaseModel;
 
 class ExampleModel extends BaseModel
 {
