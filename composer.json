@@ -21,7 +21,8 @@
 	"autoload": {
 	    "psr-4": {
 	        "App\\": "app/src/",
-            "Core\\": "core/classes/"
+            "Core\\": "core/classes/",
+            "Library\\": "core/libraries/"
 	    },
         "files": [
             "core/functions/autoload.php"
