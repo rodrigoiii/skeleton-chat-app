@@ -42,6 +42,18 @@ function config_path($str = "")
 }
 
 /**
+ * Return the core path of application.
+ *
+ * @param  string $str
+ * @return string
+ */
+function core_path($str = "")
+{
+    $str = !empty($str) ? ("/" . trim($str)) : "";
+    return base_path("core") . $str;
+}
+
+/**
  * Return the database path of application.
  *
  * @param  string $str
