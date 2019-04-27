@@ -1,9 +1,9 @@
 {
 	"name": "rodrigoiii/slim-project",
-	"description": "",
+	"description": "Web Builder Kit with Slim Micro Framework",
 	"type": "project",
 	"license": "MIT",
-	"keywords": ["slim", "micro framework", "php"],
+	"keywords": ["slim", "micro framework", "php", "web", "builder"],
 	"authors": [
 	    {
 	        "name": "Rodrigo Galura III",

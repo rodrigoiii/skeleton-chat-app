@@ -19,6 +19,8 @@ $app->loadDatabaseConnection();
 
 # load middlewares
 
+# routes
 require app_path("routes.php");
 
+# run the application
 $app->run();
