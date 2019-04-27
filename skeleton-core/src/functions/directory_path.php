@@ -8,9 +8,8 @@
  */
 function base_path($str = "")
 {
-    $is_own_server = count(glob($_SERVER['DOCUMENT_ROOT'] . "/.env")) === 0;
-
     $root = $_SERVER[PHP_SAPI !== "cli" ? "DOCUMENT_ROOT" : "PWD"];
+    $is_own_server = count(glob("{$root}/.env")) === 0;
     $root .= $is_own_server ? "/.." : "";
 
     $str = !empty($str) ? ("/" . trim($str)) : "";
