@@ -48,10 +48,6 @@ class App extends SlimApp
         $this->pushControllersDefinition($this->definitions);
         $this->pushMiddlewaresDefinition($this->definitions);
 
-        // echo "<pre>";
-        // var_dump($this->definitions);
-        // die;
-
         $builder->addDefinitions(array_merge($this->definitions, $this->custom_definitions));
     }
 
@@ -80,6 +76,12 @@ class App extends SlimApp
         {
             return new PhpErrorHandler($view);
         };
+
+        if (is_dev())
+        {
+            unset($definitions['errorHandler']);
+            unset($definitions['phpErrorHandler']);
+        }
     }
 
     private function pushViewDefinition(array &$definitions)
