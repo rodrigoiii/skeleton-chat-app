@@ -2,9 +2,9 @@
 
 namespace App\Middlewares;
 
+use Core\BaseMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Core\BaseMiddleware;
 
 class ExampleMiddleware extends BaseMiddleware
 {
