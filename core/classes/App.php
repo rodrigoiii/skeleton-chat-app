@@ -138,7 +138,7 @@ class App extends SlimApp
 
                 if (!array_key_exists($controller_definition, $definitions))
                 {
-                    $definitions["{$controller_definition}"] = function(ContainerInterface $c) use ($controller_definition_value)
+                    $definitions[$controller_definition] = function(ContainerInterface $c) use ($controller_definition_value)
                     {
                         return new $controller_definition_value($c);
                     };
@@ -178,7 +178,7 @@ class App extends SlimApp
 
                 if (!array_key_exists($middleware_definition, $definitions))
                 {
-                    $definitions["{$middleware_definition}"] = function(ContainerInterface $c) use ($middleware_definition_value)
+                    $definitions[$middleware_definition] = function(ContainerInterface $c) use ($middleware_definition_value)
                     {
                         return new $middleware_definition_value($c);
                     };
