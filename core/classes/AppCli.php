@@ -45,6 +45,7 @@ class AppCli
 
         $commands = [];
         $this->pushCommands($commands);
+        $this->pushFoundationCommands($commands);
 
         $this->cli_app->addCommands($commands);
     }
@@ -108,6 +109,24 @@ class AppCli
             $base_file = basename($absolute_path_file, ".php");
 
             $command_class = get_app_namespace() . "Commands\\" . $base_file;
+
+            return new $command_class;
+        }, $glob_path);
+    }
+
+    /**
+     * Push all commands on core/classes/Console/Commands directory to $commands variable.
+     * @param  array  &$commands
+     * @return void
+     */
+    private function pushFoundationCommands(array &$commands)
+    {
+        $glob_path = glob(core_path('classes/Console/Commands/*.php'));
+
+        $commands = array_map(function($absolute_path_file) {
+            $base_file = basename($absolute_path_file, ".php");
+
+            $command_class = "Core\Console\Commands\\" . $base_file;
 
             return new $command_class;
         }, $glob_path);
