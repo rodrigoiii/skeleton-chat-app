@@ -32,8 +32,8 @@ class App extends SlimApp
     public function __construct(array $custom_definitions = [])
     {
         $this->definitions = [
-            'settings.displayErrorDetails' => config('app.debug'),
-            'settings.database' => config('database')
+            'settings.displayErrorDetails' => config("app.debug"),
+            'settings.database' => config("database")
         ];
 
         $this->custom_definitions = $custom_definitions;
