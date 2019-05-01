@@ -4,6 +4,7 @@
 
 1. [Slim](http://www.slimframework.com/docs/) micro framework
 2. [Twig](https://twig.symfony.com/)
+3. [Phinx](https://phinx.org/)
 
 ## Implementation of useful libraries
 

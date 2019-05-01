@@ -35,7 +35,7 @@ class NotFoundHandler
         return $this->view->render(
                     $response->withStatus(404)
                     ->withHeader('Content-Type', "text/html"),
-                    config('view.error_pages.404')
+                    config("view.error_pages.404")
                 );
     }
 }

@@ -2,6 +2,10 @@
 
 namespace Core;
 
+use Core\ErrorHandlers\ErrorHandler;
+use Core\ErrorHandlers\NotAllowedHandler;
+use Core\ErrorHandlers\NotFoundHandler;
+use Core\ErrorHandlers\PhpErrorHandler;
 use DI\Bridge\Slim\App as SlimApp;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
@@ -10,10 +14,6 @@ use Dotenv\Environment\DotenvFactory;
 use Dotenv\Exception\InvalidPathException;
 use Illuminate\Database\Capsule\Manager;
 use Psr\Container\ContainerInterface;
-use Core\ErrorHandlers\ErrorHandler;
-use Core\ErrorHandlers\NotAllowedHandler;
-use Core\ErrorHandlers\NotFoundHandler;
-use Core\ErrorHandlers\PhpErrorHandler;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 
@@ -32,8 +32,8 @@ class App extends SlimApp
     public function __construct(array $custom_definitions = [])
     {
         $this->definitions = [
-            'settings.displayErrorDetails' => config('app.debug'),
-            'settings.database' => config('database')
+            'settings.displayErrorDetails' => config("app.debug"),
+            'settings.database' => config("database")
         ];
 
         $this->custom_definitions = $custom_definitions;

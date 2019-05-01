@@ -57,3 +57,16 @@ function get_app_namespace()
 
     return $app_namespace;
 }
+
+
+/**
+ * Return server request scheme along with server name.
+ *
+ * @param  string $str_added
+ * @return string
+ */
+function base_url($str_added = "")
+{
+    $str_added = !empty($str_added) ? "/{$str_added}" : "";
+    return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . $str_added;
+}
