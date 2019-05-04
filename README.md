@@ -1,4 +1,4 @@
-# slim-project
+# skeleton
 
 ## Need to know before to use this project.
 
