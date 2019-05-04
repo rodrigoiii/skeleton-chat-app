@@ -37,7 +37,7 @@ class NotAllowedHandler
                     $response->withStatus(405)
                     ->withHeader('Allow', implode(', ', $methods))
                     ->withHeader('Content-Type', "text/html"),
-                    config('view.error_pages.405')
+                    config("view.error_pages.405")
                 );
     }
 }

@@ -38,7 +38,7 @@ class PhpErrorHandler
         return $this->view->render(
                     $response->withStatus(500)
                     ->withHeader('Content-Type', "text/html"),
-                    config('view.error_pages.500')
+                    config("view.error_pages.500")
                 );
     }
 }
