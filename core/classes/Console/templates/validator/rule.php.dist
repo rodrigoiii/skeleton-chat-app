@@ -1,0 +1,19 @@
+<?php
+
+namespace {{namespace}}Validation\Rules;
+
+use Respect\Validation\Rules\AbstractRule;
+
+class {{rule}} extends AbstractRule
+{
+    /**
+     * Validate the input provided.
+     *
+     * @param  mixed $input
+     * @return boolean
+     */
+    public function validate($input)
+    {
+        return true;
+    }
+}
