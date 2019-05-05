@@ -1,0 +1,12 @@
+// bootstrap 3 view ports
+@function bs3-screen-lg() { @return 1200px; }
+@function bs3-screen-md-max() { @return 1199px; }
+@function bs3-screen-md-min() { @return 992px; }
+@function bs3-screen-sm-max() { @return 991px; }
+@function bs3-screen-sm-min() { @return 768px; }
+@function bs3-screen-xs() { @return 767px; }
+
+// mobile view ports
+@function mobile-lg() { @return 425px; }
+@function mobile-md() { @return 375px; }
+@function mobile-sm() { @return 320px; }

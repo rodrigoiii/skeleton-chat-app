@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+if (PHP_SAPI !== "cli") die; // abort if the usage not via command line
+
+# composer autoload
+require __DIR__ . "/vendor/autoload.php";
+
+$dotEnv = Core\AppCli::createEnvironment();
+$dotEnv->overload();
+$dotEnv->required("APP_NAME")->notEmpty();
+$dotEnv->required("APP_ENV")->allowedValues(["development", "production"]);
+$dotEnv->required("DB_HOSTNAME");
+$dotEnv->required("DB_PORT")->isInteger();
+$dotEnv->required("DB_USERNAME");
+$dotEnv->required("DB_PASSWORD");
+$dotEnv->required("DB_NAME");
+
+$appCli = new Core\AppCli([
+    'name' => config("app.name"),
+    'database' => config("database")
+]);
+
+$appCli->run();
