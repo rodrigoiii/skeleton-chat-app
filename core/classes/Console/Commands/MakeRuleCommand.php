@@ -44,11 +44,11 @@ class MakeRuleCommand extends BaseCommand
 
         try {
             if (!preg_match("/^[A-Z]\w*$/", $rule)) throw new \Exception("Error: Invalid rule name. It must be Characters and PascalCase.", 1);
-            if (file_exists(app_path("Validation/Rules/{$rule}.php"))) throw new \Exception("Error: The rule name is already created.", 1);
+            if (file_exists(app_path("src/Validation/Rules/{$rule}.php"))) throw new \Exception("Error: The rule name is already created.", 1);
 
-            if (!file_exists(app_path("Validation")))
+            if (!file_exists(app_path("src/Validation")))
             {
-                mkdir(app_path("Validation"), 0755, true);
+                mkdir(app_path("src/Validation"), 0755, true);
             }
 
             $output->writeln($this->ruleTemplate($rule) ? "Successfully created rule class." : "Rule file not created. Check the file path.");
@@ -75,12 +75,12 @@ class MakeRuleCommand extends BaseCommand
                 '{{rule}}' => $rule
             ]);
 
-            if (!file_exists(app_path("Validation/Rules")))
+            if (!file_exists(app_path("src/Validation/Rules")))
             {
-                mkdir(app_path("Validation/Rules"), 0755, true);
+                mkdir(app_path("src/Validation/Rules"), 0755, true);
             }
 
-            $file_path = app_path("Validation/Rules/{$rule}.php");
+            $file_path = app_path("src/Validation/Rules/{$rule}.php");
 
             $file = fopen($file_path, "w");
             fwrite($file, $template);
@@ -111,12 +111,12 @@ class MakeRuleCommand extends BaseCommand
                 '{{rule}}' => $rule
             ]);
 
-            if (!file_exists(app_path("Validation/Exceptions")))
+            if (!file_exists(app_path("src/Validation/Exceptions")))
             {
-                mkdir(app_path("Validation/Exceptions"), 0755, true);
+                mkdir(app_path("src/Validation/Exceptions"), 0755, true);
             }
 
-            $file_path = app_path("Validation/Exceptions/{$rule}Exception.php");
+            $file_path = app_path("src/Validation/Exceptions/{$rule}Exception.php");
 
             $file = fopen($file_path, "w");
             fwrite($file, $template);

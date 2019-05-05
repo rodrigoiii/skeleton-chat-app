@@ -43,7 +43,7 @@ class MakeRequestCommand extends BaseCommand
 
         try {
             if (!preg_match("/^[A-Z]\w*$/", $request)) throw new \Exception("Error: Invalid request name. It must be Characters and PascalCase.", 1);
-            if (file_exists(app_path("Requests/{$request}.php"))) throw new \Exception("Error: The request name is already created.", 1);
+            if (file_exists(app_path("src/Requests/{$request}.php"))) throw new \Exception("Error: The request name is already created.", 1);
 
             $is_created = $this->makeTemplate($request);
 
@@ -70,12 +70,12 @@ class MakeRequestCommand extends BaseCommand
                 '{{request}}' => $request
             ]);
 
-            if (!file_exists(app_path("Requests")))
+            if (!file_exists(app_path("src/Requests")))
             {
-                mkdir(app_path("Requests"), 0755, true);
+                mkdir(app_path("src/Requests"), 0755, true);
             }
 
-            $file_path = app_path("Requests/{$request}.php");
+            $file_path = app_path("src/Requests/{$request}.php");
 
             $file = fopen($file_path, "w");
             fwrite($file, $template);

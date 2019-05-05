@@ -55,7 +55,7 @@ class MakeDebugbarCommand extends BaseCommand
 
     public function isDebugbarExist($debugbar)
     {
-        return file_exists(app_path("Debugbars/{$debugbar}.php"));
+        return file_exists(app_path("src/Debugbars/{$debugbar}.php"));
     }
 
     /**
@@ -74,12 +74,12 @@ class MakeDebugbarCommand extends BaseCommand
             '{{debugbar}}' => $debugbar
         ]);
 
-        if (!file_exists(app_path("Debugbars")))
+        if (!file_exists(app_path("src/Debugbars")))
         {
-            mkdir(app_path("Debugbars"), 0755, true);
+            mkdir(app_path("src/Debugbars"), 0755, true);
         }
 
-        $file_path = app_path("Debugbars/{$debugbar}.php");
+        $file_path = app_path("src/Debugbars/{$debugbar}.php");
 
         $file = fopen($file_path, "w");
         fwrite($file, $template);
