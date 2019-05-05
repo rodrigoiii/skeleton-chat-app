@@ -54,15 +54,15 @@ function core_path($str = "")
 }
 
 /**
- * Return the database path of application.
+ * Return the db path of application.
  *
  * @param  string $str
  * @return string
  */
-function database_path($str = "")
+function db_path($str = "")
 {
     $str = !empty($str) ? ("/" . trim($str)) : "";
-    return base_path("database") . $str;
+    return base_path("db") . $str;
 }
 
 /**
