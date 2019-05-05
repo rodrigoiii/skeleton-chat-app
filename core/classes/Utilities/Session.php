@@ -107,7 +107,7 @@ class Session
      */
     public static function delete($key)
     {
-        if (static::_isSet($key))
+        if (static::isExist($key))
         {
             unset($_SESSION[$key]);
         }
@@ -130,7 +130,7 @@ class Session
         else
         {
             foreach ($keys as $key) {
-                if (static::_isSet($key))
+                if (static::isExist($key))
                 {
                     unset($_SESSION[$key]);
                 }
