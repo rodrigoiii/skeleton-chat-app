@@ -1,0 +1,5 @@
+/vendor
+/.env
+/phinx.yml
+
+!.gitignore
