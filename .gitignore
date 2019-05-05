@@ -2,5 +2,9 @@
 /.env
 /phinx.yml
 /node_modules
+/public/css
+/public/js
+/public/dist
+/resources/dist-views
 
 !.gitignore
