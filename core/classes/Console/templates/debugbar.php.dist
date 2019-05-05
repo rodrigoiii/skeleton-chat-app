@@ -1,0 +1,28 @@
+<?php
+
+namespace {{namespace}}Debugbars;
+
+use Tracy\IBarPanel;
+
+class {{debugbar}} implements IBarPanel
+{
+    public function getTab()
+    {
+        return '
+            <span>
+                <span class="tracy-label">{{debugbar}}</span>
+            </span>
+        ';
+    }
+
+    public function getPanel()
+    {
+        return '
+            <div class="tracy-inner">
+                <div class="tracy-inner-container">
+                    Hello World
+                </div>
+            </div>
+        ';
+    }
+}
