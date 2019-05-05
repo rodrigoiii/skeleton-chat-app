@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/rodrigoiii/skeleton-admin#readme",
   "devDependencies": {
+    "bootstrap": "^3.4.1",
+    "jquery": "^3.4.1",
     "sponge-rod": "^3.10.1"
   },
   "dependencies": {}

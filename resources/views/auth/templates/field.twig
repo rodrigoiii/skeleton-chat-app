@@ -1,0 +1,25 @@
+{% set field_text = (field_text is defined ? field_text : str_title(field_name)) %}
+{% set field_type = (field_type is defined ? field_type : "text") %}
+{% set field_value = (field_value is defined ? field_value : "") %}
+{% set place_holder = (place_holder is defined ? place_holder : "") %}
+{% set enabled_error = (enabled_error is defined ? enabled_error : true) %}
+{% set enabled_success = (enabled_success is defined ? enabled_success : true) %}
+{% set enabled_old_input = (enabled_old_input is defined ? enabled_old_input : true) %}
+
+<div class="form-group has-feedback {{ old_input is not empty ? (errors[field_name] is not empty ? (enabled_error ? 'has-error' : '') : (enabled_success ? 'has-success' : '')) }}">
+    <label for="{{ field_name }}">{{ field_text }}</label>
+    <input type="{{ field_type }}" name="{{ field_name }}" class="form-control" value="{{ old_input[field_name] ? (enabled_old_input ? old_input[field_name] : '') : field_value }}" placeholder="{{ place_holder }}" />
+
+    {% if old_input is not empty %}
+        {% if errors[field_name] is not empty %}
+            {% if enabled_error %}
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            {% endif %}
+            <span class="help-block">{{ errors[field_name] | first }}</span>
+        {% else %}
+            {% if enabled_success %}
+            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>

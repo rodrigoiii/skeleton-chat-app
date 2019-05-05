@@ -1,0 +1,60 @@
+module.exports = {
+  debug: false,
+
+  sass: {
+    src: "app/src/sass/**/*.scss",
+    dest: "app/css",
+  },
+
+  scripts: {
+    entries_object: {
+      "app": "app.js",
+    },
+    entries_array: ["app2", "app3"],
+    dest: "app/js",
+    options: {
+      base: "app/src/js"
+    },
+  },
+
+  build_views: {
+    src: "app/**/*.html",
+    dest: "app/dist/app"
+  },
+
+  build_images: {
+    src: [
+      "app/img/**/*.jpg",
+      "app/img/**/*.png",
+      "app/img/**/*.gif",
+    ],
+    dest: "app/dist/app/img",
+    use_flatten: false
+  },
+
+  build_fonts: {
+    src: [
+      "app/**/*.eot",
+      "app/**/*.svg",
+      "app/**/*.ttf",
+      "app/**/*.woff",
+      "app/**/*.woff2",
+      "app/**/*.otf"
+    ],
+    dest: "app/dist/app/fonts",
+    use_flatten: true
+  },
+
+  build: {
+    callback: function() {
+      console.log("build callback");
+    }
+  },
+
+  unbuild: {
+    dir: "app/dist",
+    callback: function() {
+      console.log("unbuild callback");
+    }
+  }
+};
