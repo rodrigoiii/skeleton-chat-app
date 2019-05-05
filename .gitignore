@@ -1,5 +1,6 @@
 /vendor
 /.env
 /phinx.yml
+/node_modules
 
 !.gitignore
