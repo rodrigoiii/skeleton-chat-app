@@ -63,7 +63,8 @@ class Auth
             Log::info("Login: ". $user->getFullName());
 
             Session::set('user_auth_id', $user_id);
-            Session::set('user_login_token', $login_token);
+            Session::set('user_logged_in_token', $login_token);
+            Session::set('user_logged_in_time', Carbon::now());
 
             $user->setLoginToken($login_token);
         }
@@ -86,7 +87,7 @@ class Auth
         if (!is_null($user))
         {
             Log::info("Logout: ". $user->getFullName());
-            Session::destroy(['user_auth_id', 'user_login_token']);
+            Session::destroy(['user_auth_id', 'user_logged_in_token', 'user_logged_in_time']);
         }
         else
         {
@@ -106,7 +107,7 @@ class Auth
 
         if (!is_null($user))
         {
-            $is_token_valid = $user->login_token === Session::get('user_login_token');
+            $is_token_valid = $user->login_token === Session::get('user_logged_in_token');
 
             if ($is_token_valid)
             {

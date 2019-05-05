@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+# change default timezone
+date_default_timezone_set(config('app.default_timezone'));
+
 # create environment
 $dotEnv = Core\App::createEnvironment();
 $dotEnv->overload();

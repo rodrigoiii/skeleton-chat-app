@@ -98,11 +98,15 @@ class AuthDebugbar implements IBarPanel
                             <tbody>
                                 <tr>
                                     <td>Auth User Id</td>
-                                    <td>'.(!empty(Session::get('user_auth_id')) ? Session::get('user_auth_id') : "N/A").'</td>
+                                    <td>'.(Session::isExist('user_auth_id') ? Session::get('user_auth_id') : "N/A").'</td>
                                 </tr>
                                 <tr>
                                     <td>Logged In Token</td>
-                                    <td>'.(!empty(Session::get('user_login_token')) ? Session::get('user_login_token') : "N/A").'</td>
+                                    <td>'.(Session::isExist('user_logged_in_token') ? Session::get('user_logged_in_token') : "N/A").'</td>
+                                </tr>
+                                <tr>
+                                    <td>Logged In Time</td>
+                                    <td>'.(Session::isExist('user_logged_in_time') ? Session::get('user_logged_in_time') : "N/A").'</td>
                                 </tr>
                                 <tr>
                                     <td>Authenticated User</td>
