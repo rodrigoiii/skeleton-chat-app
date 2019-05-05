@@ -46,7 +46,7 @@ class MakeMigrationCommand extends BaseCommand
             if (!preg_match("/^[A-Z]\w*$/", $migration)) throw new \Exception("Error: Invalid migration name. It must be Characters and PascalCase.", 1);
             if (!in_array($template, ["add-table", "add-column", "change-column"])) throw new \Exception("Invalid template option. It must be 'add-table', 'add-column' or 'change-column'.", 1);
 
-            $output->writeln($this->executeCommand("php phinx create {$migration} -t ./vendor/rodrigoiii/skeleton-core/src/classes/Console/templates/migration/{$template}.php.dist"));
+            $output->writeln($this->executeCommand("php phinx create {$migration} -t ./core/classes/Console/templates/migration/{$template}.php.dist"));
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
         }
