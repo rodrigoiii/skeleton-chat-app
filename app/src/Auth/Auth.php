@@ -107,10 +107,20 @@ class Auth
 
         if (!is_null($user))
         {
-            $is_token_valid = $user->login_token === Session::get('user_logged_in_token');
+            $is_token_existed = Session::get('user_logged_in_token') !== null;
 
-            if ($is_token_valid)
+            if ($is_token_existed)
             {
+                $is_token_matched = $user->login_token === Session::get('user_logged_in_token');
+
+                if ($is_token_matched)
+                {
+                    d(Session::get('user_logged_in_time'));
+                    // todo
+                    // $is_token_expired =
+                }
+
+
                 return true;
             }
 
