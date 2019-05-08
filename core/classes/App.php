@@ -14,6 +14,8 @@ use Dotenv\Environment\DotenvFactory;
 use Dotenv\Exception\InvalidPathException;
 use Illuminate\Database\Capsule\Manager;
 use Psr\Container\ContainerInterface;
+use Slim\Csrf\Guard;
+use Slim\Flash\Messages;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 
