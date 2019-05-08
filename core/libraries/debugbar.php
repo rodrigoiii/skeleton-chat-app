@@ -2,7 +2,7 @@
 
 use Tracy\Debugger;
 
-if (is_dev() && filter_var(env('DEBUG_BAR_ON'), FILTER_VALIDATE_BOOLEAN) && PHP_SAPI !== "cli")
+if (is_dev() && config("debugbar.enabled") && PHP_SAPI !== "cli")
 {
     Debugger::enable(Debugger::DEVELOPMENT, storage_path('logs'));
     Debugger::timer();

@@ -17,6 +17,7 @@ $dotEnv->required("DB_NAME");
 
 $dotEnv->required("USE_DIST")->isBoolean();
 $dotEnv->required("APP_STATUS_UP")->isBoolean();
+$dotEnv->required("DEBUG_BAR_ON")->isBoolean();
 
 # application instance
 $app = new Core\App;
