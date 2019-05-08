@@ -14,6 +14,8 @@ use Dotenv\Environment\DotenvFactory;
 use Dotenv\Exception\InvalidPathException;
 use Illuminate\Database\Capsule\Manager;
 use Psr\Container\ContainerInterface;
+use Slim\Csrf\Guard;
+use Slim\Flash\Messages;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 
@@ -34,7 +36,7 @@ class App extends SlimApp
         $this->definitions = [
             'settings.displayErrorDetails' => config("app.debug"),
             'settings.database' => config("database"),
-            'settings.tracy' => config("debugbar")
+            'settings.tracy' => config("debugbar.settings")
         ];
 
         $this->custom_definitions = $custom_definitions;
