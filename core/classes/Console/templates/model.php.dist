@@ -1,0 +1,10 @@
+<?php
+
+namespace {{namespace}}Models{{sub_directories}};
+
+use Core\BaseModel;
+
+class {{model}} extends BaseModel
+{
+    //
+}

@@ -1,0 +1,17 @@
+<?php
+
+namespace {{namespace}}Validation\Exceptions;
+
+use Respect\Validation\Exceptions\ValidationException;
+
+class {{rule}}Exception extends ValidationException
+{
+    public static $defaultTemplates = [
+        self::MODE_DEFAULT => [
+            self::STANDARD => "Error Message"
+        ],
+        self::MODE_NEGATIVE => [
+            self::STANDARD => "Invert Error Message"
+        ]
+    ];
+}
