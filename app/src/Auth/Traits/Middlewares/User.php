@@ -3,6 +3,7 @@
 namespace App\Auth\Traits\Middlewares;
 
 use App\Auth\Auth;
+use Core\Utilities\Session;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -29,7 +30,15 @@ trait User
 
     public function redirectHandler(Response $response)
     {
-        $this->flash->addMessage('error', "Unauthorized to access the page!");
+        if (!is_null(Session::get('logout_session_expired', true)))
+        {
+            $this->flash->addMessage('warning', "Login session already expired!");
+        }
+        else
+        {
+            $this->flash->addMessage('danger', "Unauthorized to access the page!");
+        }
+
         return $response->withRedirect($this->router->pathFor('auth.login'));
     }
 }

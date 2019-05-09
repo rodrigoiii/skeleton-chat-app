@@ -3,6 +3,7 @@
 namespace App\Auth;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Core\Log;
 use Core\Utilities\Session;
 use Exception;
@@ -117,19 +118,24 @@ class Auth
                 {
                     if (!is_null(Session::get('user_logged_in_time')))
                     {
-                        $diff = Carbon::now()->diffInSeconds($carbon);
+                        $logged_in_time = Session::get('user_logged_in_time');
 
-                        d($diff);
-                        die;
+                        $diff = Carbon::now()->diffInSeconds(Carbon::parse($logged_in_time));
 
-                        // todo
-                        // $is_token_expired =
+                        $is_token_expired = $diff >= config("auth.login.session_expiration");
+
+                        if ($is_token_expired)
+                        {
+                            Session::set('logout_session_expired', true);
+                            goto logout;
+                        }
                     }
                 }
 
                 return true;
             }
 
+            logout:
             static::logout();
         }
 
