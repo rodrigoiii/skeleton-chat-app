@@ -31,6 +31,7 @@ $app->add("Core\\GlobalCsrfMiddleware");
 $app->add($container->get('csrf'));
 $app->add("Core\\OldInputMiddleware");
 $app->add("Core\\AppStatusUpMiddleware");
+$app->add("Core\\RemoveTrailingSlashMiddleware");
 
 if (is_dev() && filter_var(env('DEBUG_BAR_ON'), FILTER_VALIDATE_BOOLEAN) && PHP_SAPI !== "cli")
 {
