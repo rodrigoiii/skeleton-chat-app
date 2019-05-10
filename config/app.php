@@ -7,6 +7,5 @@ return [
     'status_up' => env("APP_STATUS_UP"),
 
     'default_timezone' => "Asia/Manila",
-
     'debug' => is_dev()
 ];
