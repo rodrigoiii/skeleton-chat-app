@@ -28,12 +28,8 @@ class $className extends $baseClassName
         $table_exist = $this->hasTable("[table]");
         if ($table_exist)
         {
-<<<<<<< HEAD
-            $this->dropTable("[table]");
-=======
             $table = $this->table("[table]");
             $table->drop()->save();
->>>>>>> console__tools-commands
         }
     }
 }
