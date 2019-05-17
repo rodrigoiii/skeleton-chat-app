@@ -8,5 +8,7 @@ return [
         '404' => "errors/page-404.twig",
         '403' => "errors/page-403.twig",
         'under_construction' => "errors/under-construction.twig"
-    ]
+    ],
+
+    'functions' => ["str_title"]
 ];

@@ -10,7 +10,10 @@ module.exports = {
   },
 
   scripts: {
-    entries_array: [],
+    entries_array: [
+      "auth/auth",
+      "auth/login"
+    ],
     dest: "public/js",
     options: {
       base: "resources/js"

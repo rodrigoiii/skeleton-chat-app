@@ -1,0 +1,25 @@
+// Core variables and mixins
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+$icon-font-path: "/node_modules/bootstrap-sass/assets/fonts/bootstrap/";
+
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+// Reset and dependencies
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+
+// Core CSS
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+
+// Component
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navbar";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/alerts";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";

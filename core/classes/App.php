@@ -36,7 +36,7 @@ class App extends SlimApp
         $this->definitions = [
             'settings.displayErrorDetails' => config("app.debug"),
             'settings.database' => config("database"),
-            'settings.tracy' => config("debugbar")
+            'settings.tracy' => config("debugbar.settings")
         ];
 
         $this->custom_definitions = $custom_definitions;
