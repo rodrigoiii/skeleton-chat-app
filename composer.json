@@ -26,7 +26,6 @@
 	},
     "require-dev": {
 		"fzaninotto/faker": "^1.8",
-		"kint-php/kint": "^3.2",
 		"robmorgan/phinx": "^0.10.7"
 	},
 	"autoload": {

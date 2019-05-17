@@ -19,7 +19,6 @@ class AppCli
 
     /**
      * @var array
-        $modules_commands = $this->getModulesCommands();
      */
     protected $settings;
 
