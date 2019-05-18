@@ -122,7 +122,7 @@ class Auth
 
                         $diff = Carbon::now()->diffInSeconds(Carbon::parse($logged_in_time));
 
-                        $is_token_expired = $diff >= config("auth.login.session_expiration");
+                        $is_token_expired = $diff >= config("auth.login.session_lifespan");
 
                         if ($is_token_expired)
                         {
