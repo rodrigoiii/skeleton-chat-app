@@ -1,0 +1,46 @@
+{% extends "auth/layout.twig" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">Account Setting</h1>
+
+            <form method="POST" action="{{ path_for('auth.account-settings') }}" id="account-settings-form" enctype="multipart/form-data">
+                {{ csrf.field | raw }}
+
+                {% include "auth/templates/image_field.twig" with {field_name: "picture", enabledQuickLoadImage: true, img_src: auth_user.picture} %}
+                {% include "auth/templates/field.twig" with {field_name: "first_name", field_value: auth_user.first_name} %}
+                {% include "auth/templates/field.twig" with {field_name: "last_name", field_value: auth_user.last_name} %}
+                {% include "auth/templates/field.twig" with {field_name: "email", field_value: auth_user.email} %}
+                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "current_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
+                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "new_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
+                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "confirm_new_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/node_modules/jquery-validation/dist/jquery.validate.js"></script>
+<script type="text/javascript" src="/node_modules/jquery-validation/dist/additional-methods.js"></script>
+
+<script type="text/javascript">
+    window.account_setting = {
+        auth_user: {
+            email: "{{ auth_user.email }}"
+        }
+    };
+</script>
+
+<script type="text/javascript" src="/js/quick-load-image.js"></script>
+<script type="text/javascript" src="/js/auth/jquery-validation/add-methods.js"></script>
+<script type="text/javascript" src="/js/auth/auth.js"></script>
+<script type="text/javascript" src="/js/auth/account-settings.js"></script>
+{% endblock %}
