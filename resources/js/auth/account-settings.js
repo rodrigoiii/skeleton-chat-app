@@ -32,11 +32,6 @@ var AccountSetting = {
           required: true,
           regex: /^[a-zA-Z\s]+$/i
         },
-        email: {
-          required: true,
-          email: true,
-          remote: "/api/jv/email-exist?invert&except=" + account_setting.auth_user.email
-        },
         current_password: {
           required: {
             depends: function(element) {
@@ -72,9 +67,6 @@ var AccountSetting = {
         last_name: {
           regex: "Please enter only letters."
         },
-        email: {
-          remote: "Email is already taken."
-        },
         confirm_password: {
           equalTo: "Password and confirm password do not match"
         }
@@ -83,11 +75,6 @@ var AccountSetting = {
 
     jvBs3.setExceptFields(["picture", "current_password", "new_password", "confirm_new_password"]);
     jvBs3.validate();
-
-    // fix remote issue
-    $('#account-settings-form :input:not(:input[type="hidden"], :button)').filter(function() {
-      return $(this).val().trim() !== "";
-    }).blur();
   }
 };
 

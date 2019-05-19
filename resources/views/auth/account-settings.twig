@@ -1,5 +1,9 @@
 {% extends "auth/layout.twig" %}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="/css/account-settings.css" />
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row">
@@ -9,13 +13,29 @@
             <form method="POST" action="{{ path_for('auth.account-settings') }}" id="account-settings-form" enctype="multipart/form-data">
                 {{ csrf.field | raw }}
 
-                {% include "auth/templates/image_field.twig" with {field_name: "picture", enabledQuickLoadImage: true, img_src: auth_user.picture} %}
-                {% include "auth/templates/field.twig" with {field_name: "first_name", field_value: auth_user.first_name} %}
-                {% include "auth/templates/field.twig" with {field_name: "last_name", field_value: auth_user.last_name} %}
-                {% include "auth/templates/field.twig" with {field_name: "email", field_value: auth_user.email} %}
-                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "current_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
-                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "new_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
-                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "confirm_new_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                {% include "auth/templates/image-field.twig" with {field_name: "picture", enabledQuickLoadImage: true, img_src: auth_user.picture} %}
+                                {% include "auth/templates/field.twig" with {field_name: "first_name", field_value: auth_user.first_name} %}
+                                {% include "auth/templates/field.twig" with {field_name: "last_name", field_value: auth_user.last_name} %}
+
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" value="{{ auth_user.email }}" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "current_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
+                                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "new_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
+                                {% include "auth/templates/field.twig" with {field_type: "password", field_name: "confirm_new_password", enabled_old_input: false, enabled_success: false, place_holder: "********"} %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Save changes</button>
@@ -39,7 +59,7 @@
     };
 </script>
 
-<script type="text/javascript" src="/js/quick-load-image.js"></script>
+<script type="text/javascript" src="/js/auth/helpers/quick-load-image.js"></script>
 <script type="text/javascript" src="/js/auth/jquery-validation/add-methods.js"></script>
 <script type="text/javascript" src="/js/auth/auth.js"></script>
 <script type="text/javascript" src="/js/auth/account-settings.js"></script>

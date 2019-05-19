@@ -10,7 +10,7 @@ use Respect\Validation\Validator as v;
  * Requirements:
  * - UserMiddleware was used
  */
-class AccountSettingRequest extends BaseRequest
+class AccountSettingsRequest extends BaseRequest
 {
     /**
      * Change password rules
@@ -26,7 +26,6 @@ class AccountSettingRequest extends BaseRequest
             'picture' => v::optionalFile(v::uploaded()->file()->image()->size(null, "5mb")),
             'first_name' => v::notEmpty()->alpha(),
             'last_name' => v::notEmpty()->alpha(),
-            'email' => v::notEmpty()->email()->not(v::emailExist($user->email)),
             'current_password' => $this->isPasswordModify() ? v::passwordVerify($user->password) : v::alwaysValid(),
             'new_password' => $this->isPasswordModify() ? v::passwordStrength() : v::alwaysValid(),
             'confirm_new_password' => $this->isPasswordModify() ? v::passwordMatch($inputs['new_password']) : v::alwaysValid(),

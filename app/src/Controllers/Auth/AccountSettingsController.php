@@ -3,7 +3,7 @@
 namespace App\Controllers\Auth;
 
 use App\Auth\Auth;
-use App\Requests\AccountSettingRequest;
+use App\Requests\AccountSettingsRequest;
 use Core\BaseController;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -23,11 +23,11 @@ class AccountSettingsController extends BaseController
     /**
      * Save the changes
      *
-     * @param  AccountSettingRequest $_request
+     * @param  AccountSettingsRequest $_request
      * @param  Response $response
      * @return Response
      */
-    public function postAccountSettings(AccountSettingRequest $_request, Response $response)
+    public function postAccountSettings(AccountSettingsRequest $_request, Response $response)
     {
         $inputs = $_request->getParams();
         $files = $_request->getUploadedFiles();
@@ -36,16 +36,18 @@ class AccountSettingsController extends BaseController
         if ($files['picture']->getSize() > 0)
         {
             // delete old picture
-            if (file_exists($picture_path = public_path(trim($user->picture, "/"))))
+            if (!is_null($user->picture))
             {
-                unlink($picture_path);
+                if (file_exists($picture_path = public_path(trim($user->picture, "/"))))
+                {
+                    unlink($picture_path);
+                }
             }
 
-            $user->picture = upload($files['picture'], config('auth.upload_path'));
+            $user->picture = upload($files['picture'], config('auth.account_settings.upload_path'));
         }
         $user->first_name = $inputs['first_name'];
         $user->last_name = $inputs['last_name'];
-        $user->email = $inputs['email'];
         if (!empty($inputs['new_password']))
         {
             $user->password = password_hash($inputs['new_password'], PASSWORD_DEFAULT);
