@@ -32,7 +32,8 @@ class CreateTableUsers extends AbstractMigration
         $table_exist = $this->hasTable("users");
         if ($table_exist)
         {
-            $this->dropTable("users");
+            $table = $this->table("users");
+            $table->drop()->save();
         }
     }
 }
