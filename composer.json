@@ -1,9 +1,9 @@
 {
-	"name": "rodrigoiii/skeleton",
-	"description": "Web Builder Kit with Slim Micro Framework",
+	"name": "rodrigoiii/skeleton-auth",
+	"description": "Authentication made in skeleton project.",
 	"type": "project",
 	"license": "MIT",
-	"keywords": ["slim", "micro framework", "php", "web", "builder"],
+	"keywords": ["slim", "micro framework", "php", "web", "builder", "auth"],
 	"authors": [
 	    {
 	        "name": "Rodrigo Galura III",
