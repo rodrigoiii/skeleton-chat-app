@@ -1,7 +1,7 @@
 {
-  "name": "skeleton-admin",
+  "name": "skeleton-auth",
   "version": "1.0.0",
-  "description": "Skeleton admin",
+  "description": "Skeleton Auth",
   "scripts": {
     "dev": "node node_modules/.bin/sponge scripts && node node_modules/.bin/sponge sass",
     "watch": "node node_modules/.bin/sponge watch",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rodrigoiii/skeleton-admin.git"
+    "url": "git+https://github.com/rodrigoiii/skeleton-auth.git"
   },
   "author": "rodrigogalura3rd@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rodrigoiii/skeleton-admin/issues"
+    "url": "https://github.com/rodrigoiii/skeleton-auth/issues"
   },
-  "homepage": "https://github.com/rodrigoiii/skeleton-admin#readme",
+  "homepage": "https://github.com/rodrigoiii/skeleton-auth#readme",
   "devDependencies": {
     "bootstrap": "^3.4.1",
     "jquery": "^3.4.1",
