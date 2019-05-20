@@ -21,7 +21,8 @@
   "devDependencies": {
     "bootstrap": "^3.4.1",
     "jquery": "^3.4.1",
-    "sponge-rod": "^3.10.1"
+    "sponge-rod": "^3.10.1",
+    "tar": "^4.4.2"
   },
   "dependencies": {}
 }
