@@ -36,7 +36,7 @@ function class_constant()
     $class = array_shift($args);
     $constant = array_shift($args);
 
-    return constant("{$class}::$constant");
+    return constant("{$class}::{$constant}");
 }
 
 
