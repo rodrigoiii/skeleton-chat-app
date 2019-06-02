@@ -23,10 +23,10 @@ function config($string)
 }
 
 /**
- * Call contant of class
+ * Call constant of class
  *
  * @param string $class
- * @param string $contant
+ * @param string $constant
  * @return mixed
  */
 function class_constant()
@@ -34,9 +34,9 @@ function class_constant()
     $args = func_get_args();
 
     $class = array_shift($args);
-    $contant = array_shift($args);
+    $constant = array_shift($args);
 
-    return $class::$contant;
+    return constant("{$class}::$constant");
 }
 
 
