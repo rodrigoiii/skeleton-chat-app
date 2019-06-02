@@ -1,0 +1,93 @@
+<?php
+
+namespace {{namespace}}Controllers{{sub_directories}};
+
+use Core\BaseController;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class {{controller}} extends BaseController
+{
+    /**
+     * [index description]
+     *
+     * @param  Response $response
+     * @return Response
+     */
+    public function index(Response $response)
+    {
+        // code
+    }
+
+    /**
+     * [show description]
+     *
+     * @param  Response $response
+     * @param  integer $id
+     * @return Response
+     */
+    public function show(Response $response, $id)
+    {
+        // code
+    }
+
+    /**
+     * [create description]
+     *
+     * @param  Response $response
+     * @return mixed
+     */
+    public function create(Response $response)
+    {
+        // code
+    }
+
+    /**
+     * [store description]
+     *
+     * @param  Request $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function store(Request $request, Response $response)
+    {
+        // code
+    }
+
+    /**
+     * [edit description]
+     *
+     * @param  Response $response
+     * @param  integer $id
+     * @return Response
+     */
+    public function edit(Response $response, $id)
+    {
+        // code
+    }
+
+    /**
+     * [update description]
+     *
+     * @param  Request $request
+     * @param  Response $response
+     * @param  integer $id
+     * @return Response
+     */
+    public function update(Request $request, Response $response, $id)
+    {
+        // code
+    }
+
+    /**
+     * [delete description]
+     *
+     * @param  Response $response
+     * @param  integer $id
+     * @return Response
+     */
+    public function delete(Response $response, $id)
+    {
+        // code
+    }
+}
