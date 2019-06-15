@@ -12,7 +12,8 @@ module.exports = {
   scripts: {
     entries_array: [
       "auth/auth",
-      "auth/login"
+      "auth/login",
+      "chat"
     ],
     dest: "public/js",
     options: {
