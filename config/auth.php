@@ -2,6 +2,6 @@
 
 return [
     'login' => [
-        'session_expiration' => 60 * 30 // 30 minutes
+        'session_lifespan' => 60 * 30 // 30 minutes
     ]
 ];

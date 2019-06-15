@@ -2,8 +2,8 @@
 
 namespace App\Requests;
 
-use Respect\Validation\Validator as v;
 use Core\BaseRequest;
+use Respect\Validation\Validator as v;
 
 class LoginRequest extends BaseRequest
 {
