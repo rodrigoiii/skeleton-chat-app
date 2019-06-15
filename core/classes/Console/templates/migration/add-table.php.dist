@@ -1,0 +1,35 @@
+<?php
+$namespaceDefinition
+use $useClassName;
+
+class $className extends $baseClassName
+{
+    /**
+     * [up description]
+     *
+     * @return void
+     */
+    public function up()
+    {
+        $table = $this->table("[table]")
+            ->addColumn("[column1]", "string")
+            ->addTimestamps();
+
+        $table->create();
+    }
+
+    /**
+     * [down description]
+     *
+     * @return void
+     */
+    public function down()
+    {
+        $table_exist = $this->hasTable("[table]");
+        if ($table_exist)
+        {
+            $table = $this->table("[table]");
+            $table->drop()->save();
+        }
+    }
+}

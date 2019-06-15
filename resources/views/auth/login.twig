@@ -1,0 +1,33 @@
+{% extends "auth/layout.twig" %}
+
+{% block title %}Login | {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">Login</h1>
+
+            {% include "auth/templates/flash-message.twig" %}
+
+            <form method="POST" action="{{ path_for('auth.login') }}" id="login-form">
+                {{ csrf.field | raw }}
+
+                {% include "auth/templates/field.twig" with {field_name: "email", enabled_success: false, enabled_old_input: false} %}
+                {% include "auth/templates/field.twig" with {field_name: "password", field_type: "password", enabled_success: false, enabled_old_input: false} %}
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/node_modules/jquery-validation/dist/jquery.validate.js"></script>
+<script type="text/javascript" src="/js/auth/auth.js"></script>
+<script type="text/javascript" src="/js/auth/login.js"></script>
+{% endblock %}

@@ -1,0 +1,15 @@
+/vendor
+/**/node_modules
+
+/.env
+/phinx.yml
+
+/public/css
+/public/js
+
+/storage/logs/*
+
+/public/dist
+/resources/dist-views
+
+!.gitignore
