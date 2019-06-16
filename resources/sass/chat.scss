@@ -1,7 +1,23 @@
 @import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
 $icon-font-path: "/node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+// Reset and dependencies
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
 @import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+
+// Core CSS
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
+@import "public/node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
 
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
 
@@ -310,7 +326,7 @@ body {
 #frame #sidepanel #search input {
   font-family: "proxima-nova",  "Source Sans Pro", sans-serif;
   padding: 10px 0 10px 46px;
-  width: calc(100% - 25px);
+  width: calc(100% - 8px);
   border: none;
   background: #32465a;
   color: #f5f5f5;
@@ -622,8 +638,8 @@ body {
   font-family: "proxima-nova",  "Source Sans Pro", sans-serif;
   float: left;
   border: none;
-  width: calc(100% - 90px);
-  padding: 11px 32px 10px 8px;
+  width: calc(100% - 50px);
+  padding: 14px 32px 10px 8px;
   font-size: 0.8em;
   color: #32465a;
 }

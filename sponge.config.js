@@ -13,6 +13,7 @@ module.exports = {
     entries_array: [
       "auth/auth",
       "auth/login",
+      "app",
       "chat"
     ],
     dest: "public/js",
