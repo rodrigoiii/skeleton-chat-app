@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+php phinx rollback -t 0
+php phinx migrate
+php phinx seed:run
