@@ -30,7 +30,25 @@ var _ = require("underscore");
 
 var Chat = {
   init: function() {
+    $('#search :input[name="filter-contacts"]').keyup(Chat.onFilterContacts);
     $('#addcontact').click(Chat.onAddContact);
+    $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(Chat.onSearchingContact, 800));
+  },
+
+  onFilterContacts: function() {
+    var keyword = $(this).val().toLowerCase();
+
+    $('#contacts .contact').filter(function() {
+        return $(".wrap .meta .name", this).text()
+          .toLowerCase()
+          .search(keyword) !== -1;
+      }).css('display', "block");
+
+    $('#contacts .contact').filter(function() {
+        return $(".wrap .meta .name", this).text()
+          .toLowerCase()
+          .search(keyword) === -1;
+      }).css('display', "none");
   },
 
   onAddContact: function() {
@@ -38,8 +56,18 @@ var Chat = {
 
     bootbox.dialog({
       title: "Add contact",
-      message: tmpl()
+      message: tmpl(),
+      className: "add-contact-modal"
     });
+  },
+
+  onSearchingContact: function() {
+    var keyword = $(this).val();
+    var tmpl = _.template($('#search-contact-results-tmpl').html());
+
+    $('.add-contact-modal table tbody').html(tmpl({
+      result_users: []
+    }));
   }
 };
 
