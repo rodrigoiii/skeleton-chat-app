@@ -64,3 +64,55 @@ function dir_is_empty($dirname)
     }
     return true;
 }
+
+/**
+ * Upload file in public/uploads folder.
+ *
+ * @param  Slim\Http\UploadedFile $file
+ * @param  string $destination
+ * @param  boolean $hast_it
+ * @return string
+ */
+function upload($file, $destination="", $hash_it=true)
+{
+    $upload_path = public_path("uploads");
+
+    if ($file->getError() === UPLOAD_ERR_OK)
+    {
+        $destination = trim($destination, "/");
+
+        if (!empty($destination))
+        {
+            $directories = explode("/", $destination);
+            $directories_num = count($directories);
+
+            for ($i=0; $i < $directories_num; $i++) {
+                $directory_to_be_created = "";
+                for ($j=0; $j <= $i; $j++) {
+                    $directory_to_be_created .= $directories[$j] . "/";
+                }
+
+                if (!file_exists("{$upload_path}/{$directory_to_be_created}"))
+                {
+                    mkdir("{$upload_path}/{$directory_to_be_created}", 0755, true);
+                }
+            }
+
+            $destination = "/{$destination}";
+        }
+
+        $type = explode("/", $file->getClientMediaType());
+        $extension = $type[1];
+        $filename = basename($file->getClientFilename(), ".{$extension}");
+        $filename = ($hash_it ? uniqid() : $filename) . "." . $extension;
+
+        $file_path = "/{$upload_path}{$destination}/{$filename}";
+        $file->moveTo($file_path);
+
+        $web_file_path = str_replace(public_path() . "/", "", $file_path);
+
+        return $web_file_path;
+    }
+
+    return null;
+}

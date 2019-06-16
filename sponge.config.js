@@ -13,6 +13,10 @@ module.exports = {
     entries_array: [
       "auth/auth",
       "auth/login",
+      "auth/account-settings",
+      "auth/jquery-validation/add-methods",
+      "auth/helpers/quick-load-image",
+
       "app",
       "chat"
     ],
