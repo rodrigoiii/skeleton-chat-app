@@ -10,7 +10,7 @@
     </div>
 </script>
 
-<script type="text/template" id="search-contact-results-tmpl">
+<script type="text/template" id="search-contact-result-tmpl">
     <% if (!_.isEmpty(result_users)) { %>
         <% _.each(result_users, function(user) { %>
             <tr>
@@ -21,18 +21,7 @@
                     <p class="contact-fullname"><%= user.full_name %></p>
                 </td>
                 <td>
-                    <% if (!user.has_request) { %>
-                        <button class="btn btn-primary btn-xs send-contact-request" data-loading-text='<span class="fa fa-refresh fa-spin"></span>' data-user-id="<%= user.id %>">
-                            <span class="glyphicon glyphicon-plus-sign"></span> Add Contact
-                        </button>
-                    <% } else {  %>
-                        <button class="btn btn-info btn-xs accept-contact-request"
-                                data-loading-text='<span class="fa fa-refresh fa-spin"></span>'
-                                data-user-id="<%= user.id %>"
-                                >
-                            <span class="glyphicon glyphicon-plus-sign"></span> Accept Request
-                        </button>
-                    <% } %>
+
                 </td>
             </tr>
         <% }); %>

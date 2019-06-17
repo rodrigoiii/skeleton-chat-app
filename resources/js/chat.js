@@ -27,9 +27,12 @@ require("bootstrap/js/transition");
 require("bootstrap/js/modal");
 
 var _ = require("underscore");
+var ChatApi = require("./classes/ChatApi");
 
 var Chat = {
   init: function() {
+    window.chatApiObj = new ChatApi("sample token");
+
     $('#search :input[name="filter-contacts"]').keyup(Chat.onFilterContacts);
     $('#addcontact').click(Chat.onAddContact);
     $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(Chat.onSearchingContact, 800));
@@ -63,11 +66,17 @@ var Chat = {
 
   onSearchingContact: function() {
     var keyword = $(this).val();
-    var tmpl = _.template($('#search-contact-results-tmpl').html());
+    var tmpl = _.template($('#search-contact-result-tmpl').html());
 
-    $('.add-contact-modal table tbody').html(tmpl({
-      result_users: []
-    }));
+    chatApiObj.searchContacts(keyword, function(result) {
+      if (result.success) {
+        $('.add-contact-modal table tbody').html(tmpl({
+          result_users: result.users
+        }));
+      } else {
+        console.error("Error: Cannot search contact this time. Please try again later");
+      }
+    });
   }
 };
 

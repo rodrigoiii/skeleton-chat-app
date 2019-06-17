@@ -42,7 +42,10 @@ if (is_dev() && filter_var(env('DEBUG_BAR_ON'), FILTER_VALIDATE_BOOLEAN) && PHP_
 }
 
 # routes
-require app_path("routes.php");
+require app_path("routes/web.php");
+$app->group("/api", function() use($app) {
+    require app_path("routes/api.php");
+});
 
 # run the application
 $app->run();

@@ -3,11 +3,16 @@
 namespace App\Models;
 
 use App\Models\Contact;
+use App\Traits\FullTextSearch;
 use Core\BaseModel;
 
 class User extends BaseModel
 {
+    use FullTextSearch;
+
     protected $fillable = ["picture", "first_name", "last_name", "email", "password", "login_token"];
+    protected $searchable = ["first_name", "last_name"];
+    protected $hidden = ["password"];
 
     const PLACEHOLDER_IMAGE = "/img/fa-image.png";
 
