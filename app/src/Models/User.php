@@ -2,11 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Contact;
 use Core\BaseModel;
 
 class User extends BaseModel
 {
-    protected $fillable = ["first_name", "last_name", "email", "password", "login_token"];
+    protected $fillable = ["picture", "first_name", "last_name", "email", "password", "login_token"];
+
+    const PLACEHOLDER_IMAGE = "/img/fa-image.png";
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, "user_id");
+    }
 
     public function setLoginToken($login_token)
     {
@@ -17,6 +25,16 @@ class User extends BaseModel
     public function getFullName()
     {
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function getPicture($placeholder = false)
+    {
+        if (!is_null($this->picture))
+        {
+            return $this->picture;
+        }
+
+        return $placeholder ? static::PLACEHOLDER_IMAGE : null;
     }
 
     public static function findByEmail($email)

@@ -703,3 +703,15 @@ body {
 #frame .content .message-input .wrap button:focus {
   outline: none;
 }
+
+.no-contacts {
+    cursor: default !important;
+
+    &:hover {
+        background: transparent !important;
+    }
+}
+
+#frame #sidepanel #profile .wrap img {
+    cursor: default;
+}
