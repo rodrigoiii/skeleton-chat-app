@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Contact;
+use App\Models\ContactRequest;
 use App\Traits\FullTextSearch;
 use Core\BaseModel;
 
@@ -40,6 +41,13 @@ class User extends BaseModel
         }
 
         return $placeholder ? static::PLACEHOLDER_IMAGE : null;
+    }
+
+    public function requestTo(User $user)
+    {
+        return ContactRequest::where('by_id', $this->id)
+            ->where('to_id', $user->getId())
+            ->first();
     }
 
     public static function findByEmail($email)

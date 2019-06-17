@@ -43,10 +43,10 @@ class ChatController extends BaseController
         // $ignore_user_ids = array_flatten([$contact_ids, $contact_requests_ids, $authUser->id]);
 
         $result = User::search($keyword)
-                    // ->whereNotIn('id', $ignore_user_ids)
+                    ->whereNotIn('id', [$id])
                     ->get();
 
-        $users = transformer($result, new SearchContactResultTransformer)->toArray();
+        $users = transformer($result, new SearchContactResultTransformer($authUser))->toArray();
 
         return $response->withJson([
             'success' => true,
