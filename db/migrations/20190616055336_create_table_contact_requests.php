@@ -14,9 +14,8 @@ class CreateTableContactRequests extends AbstractMigration
         $table = $this->table("contact_requests")
             ->addColumn("by_id", "integer")
             ->addColumn("to_id", "integer")
-            ->addColumn("is_read_by", "boolean", ['default' => 0])
-            ->addColumn("is_read_to", "boolean", ['default' => 0])
-            ->addColumn("is_accepted", "boolean")
+            ->addColumn("is_read", "boolean", ['default' => 0])
+            ->addColumn("is_accepted", "boolean", ['default' => 0])
             ->addTimestamps();
 
         $table->create();

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\ContactRequest;
 use App\Models\User;
 use App\Transformer\SearchContactResultTransformer;
 use Core\BaseController;
@@ -18,12 +19,14 @@ class ChatController extends BaseController
      */
     public function index(Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 2; // assume auth id
 
         $authUser = User::find($id);
         $contacts = $authUser->contacts;
+        $contactRequests = $authUser->contact_requests();
+        $notifications = $authUser->notifications();
 
-        return $this->view->render($response, "chat/chat.twig", compact("contacts"));
+        return $this->view->render($response, "chat/chat.twig", compact("contacts", "contactRequests", "notifications"));
     }
 
     public function searchContacts(Request $request, Response $response)
@@ -31,7 +34,7 @@ class ChatController extends BaseController
         // $login_token = $request->getParam('login_token');
         // $authUser = User::findByLoginToken($login_token);
 
-        $id = 1; // assume auth id
+        $id = 2; // assume auth id
         $authUser = User::find($id);
 
         $keyword = $request->getParam('keyword');
@@ -52,5 +55,29 @@ class ChatController extends BaseController
             'success' => true,
             'users' => $users['data']
         ]);
+    }
+
+    public function sendContactRequest(Request $request, Response $response)
+    {
+        $id = 2; // assume auth id
+
+        $authUser = User::find($id);
+
+        // $login_token = $request->getParam('login_token');
+        // $authUser = User::findByLoginToken($login_token);
+        $to_id = $request->getParam('to_id');
+
+        $is_sent = ContactRequest::send($authUser->id, $to_id);
+
+        return $response->withJson($is_sent ?
+            [
+                'success' => true,
+                'message' => "Successfully send request."
+            ] :
+            [
+                'success' => false,
+                'message' => "Cannot send request this time. Please try again later."
+            ]
+        );
     }
 }

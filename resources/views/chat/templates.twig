@@ -24,7 +24,7 @@
                     <% if (user.has_pending_request) { %>
                         <span class="label label-warning">Pending</span>
                     <% } else {  %>
-                        <button class="btn btn-primary btn-xs send-contact-request" data-loading-text='<span class="fa fa-refresh fa-spin"></span>' data-user-id="<%= user.id %>">
+                        <button class="btn btn-primary btn-xs send-contact-request" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>' data-user-id="<%= user.id %>">
                             <span class="glyphicon glyphicon-plus-sign"></span> Add Contact
                         </button>
                     <% } %>

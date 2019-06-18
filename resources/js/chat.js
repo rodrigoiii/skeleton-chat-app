@@ -25,6 +25,8 @@
 // });
 require("bootstrap/js/transition");
 require("bootstrap/js/modal");
+require("bootstrap/js/dropdown");
+require("bootstrap/js/button");
 
 var _ = require("underscore");
 var ChatApi = require("./classes/ChatApi");
@@ -36,6 +38,7 @@ var Chat = {
     $('#search :input[name="filter-contacts"]').keyup(Chat.onFilterContacts);
     $('#addcontact').click(Chat.onAddContact);
     $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(Chat.onSearchingContact, 800));
+    $('body').on('click', ".add-contact-modal .send-contact-request", Chat.onSendContactRequest);
   },
 
   onFilterContacts: function() {
@@ -75,6 +78,24 @@ var Chat = {
         }));
       } else {
         console.error("Error: Cannot search contact this time. Please try again later");
+      }
+    });
+  },
+
+  onSendContactRequest: function() {
+    var _this = this;
+
+    var to_id = $(this).data("user-id");
+
+    $(this).prop('disabled', true);
+    $(this).button('loading');
+
+    chatApiObj.sendContactRequest(to_id, function(response) {
+      if (response.success) {
+        $(_this).fadeOut(function() {
+          $(this).parent().html('<span class="label label-success">Successfully sent request.</span>');
+          $(this).remove();
+        });
       }
     });
   }
