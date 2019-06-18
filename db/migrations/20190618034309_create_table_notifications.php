@@ -12,10 +12,11 @@ class CreateTableNotifications extends AbstractMigration
     public function up()
     {
         $table = $this->table("notifications")
-            ->addColumn("by_id", "integer")
+            ->addColumn("from_id", "integer")
             ->addColumn("to_id", "integer")
+            ->addColumn("type", "enum", ['values' => ["send-request", "accept-request", "custom"]])
+            ->addColumn("message", "string", ['default' => ""])
             ->addColumn("is_read", "boolean", ['default' => 0])
-            ->addColumn("message", "string")
             ->addTimestamps();
 
         $table->create();

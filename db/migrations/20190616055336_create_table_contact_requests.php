@@ -12,15 +12,14 @@ class CreateTableContactRequests extends AbstractMigration
     public function up()
     {
         $table = $this->table("contact_requests")
-            ->addColumn("by_id", "integer")
+            ->addColumn("from_id", "integer")
             ->addColumn("to_id", "integer")
-            ->addColumn("is_read", "boolean", ['default' => 0])
             ->addColumn("is_accepted", "boolean", ['default' => 0])
             ->addTimestamps();
 
         $table->create();
 
-        $table->addForeignKey("by_id", "users", "id")
+        $table->addForeignKey("from_id", "users", "id")
             ->addForeignKey("to_id", "users", "id")
             ->save();
     }
@@ -37,7 +36,7 @@ class CreateTableContactRequests extends AbstractMigration
         {
             $table = $this->table("contact_requests");
 
-            $table->dropForeignKey(["by_id", "to_id"])
+            $table->dropForeignKey(["from_id", "to_id"])
                 ->drop("contact_requests")
                 ->save();
         }

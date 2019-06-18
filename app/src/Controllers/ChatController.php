@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ContactRequest;
+use App\Models\Notification;
 use App\Models\User;
 use App\Transformer\SearchContactResultTransformer;
 use Core\BaseController;
@@ -22,11 +23,12 @@ class ChatController extends BaseController
         $id = 2; // assume auth id
 
         $authUser = User::find($id);
-        $contacts = $authUser->contacts;
-        $contactRequests = $authUser->contact_requests();
-        $notifications = $authUser->notifications();
+        // $contacts = $authUser->contacts;
+        // $notifications = $authUser->notifications();
 
-        return $this->view->render($response, "chat/chat.twig", compact("contacts", "contactRequests", "notifications"));
+        $notifications = Notification::getAll($authUser);
+
+        return $this->view->render($response, "chat/chat.twig", compact("contacts", "notifications"));
     }
 
     public function searchContacts(Request $request, Response $response)

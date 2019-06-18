@@ -24,15 +24,15 @@ class User extends BaseModel
     }
 
     // request of others to self
-    public function contact_requests()
-    {
-        return $this->hasMany(ContactRequest::class, "to_id");
-    }
+    // public function contact_requests()
+    // {
+    //     return $this->hasMany(ContactRequest::class, "to_id");
+    // }
 
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class, "to_id");
-    }
+    // public function notifications()
+    // {
+    //     return $this->hasMany(Notification::class, "to_id");
+    // }
 
     public function setLoginToken($login_token)
     {
@@ -57,7 +57,7 @@ class User extends BaseModel
 
     public function requestTo(User $user)
     {
-        return ContactRequest::where('by_id', $this->id)
+        return ContactRequest::where('from_id', $this->id)
             ->where('to_id', $user->getId())
             ->first();
     }
