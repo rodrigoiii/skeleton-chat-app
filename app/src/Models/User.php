@@ -23,17 +23,6 @@ class User extends BaseModel
         return $this->hasMany(Contact::class, "user_id");
     }
 
-    // request of others to self
-    // public function contact_requests()
-    // {
-    //     return $this->hasMany(ContactRequest::class, "to_id");
-    // }
-
-    // public function notifications()
-    // {
-    //     return $this->hasMany(Notification::class, "to_id");
-    // }
-
     public function setLoginToken($login_token)
     {
         $this->login_token = $login_token;

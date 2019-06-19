@@ -1,5 +1,7 @@
 Tasks:
  ✔ Database @done (19-06-16 18:12)
  ☐ Contacts System
+   ☐ Block unauthorized request
+   ☐ Validation
  ☐ Chat Status
  ☐ Send Message

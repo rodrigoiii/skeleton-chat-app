@@ -20,7 +20,7 @@ class ChatController extends BaseController
      */
     public function index(Response $response)
     {
-        $id = 2; // assume auth id
+        $id = 1; // assume auth id
 
         $authUser = User::find($id);
         // $contacts = $authUser->contacts;
@@ -28,7 +28,8 @@ class ChatController extends BaseController
 
         $notifications = Notification::getAll($authUser);
 
-        return $this->view->render($response, "chat/chat.twig", compact("contacts", "notifications"));
+        // remove authUser after when skeleton auth used
+        return $this->view->render($response, "chat/chat.twig", compact("authUser", "contacts", "notifications"));
     }
 
     public function searchContacts(Request $request, Response $response)
@@ -36,7 +37,7 @@ class ChatController extends BaseController
         // $login_token = $request->getParam('login_token');
         // $authUser = User::findByLoginToken($login_token);
 
-        $id = 2; // assume auth id
+        $id = 1; // assume auth id
         $authUser = User::find($id);
 
         $keyword = $request->getParam('keyword');
@@ -61,7 +62,7 @@ class ChatController extends BaseController
 
     public function sendContactRequest(Request $request, Response $response)
     {
-        $id = 2; // assume auth id
+        $id = 1; // assume auth id
 
         $authUser = User::find($id);
 
@@ -79,6 +80,35 @@ class ChatController extends BaseController
             [
                 'success' => false,
                 'message' => "Cannot send request this time. Please try again later."
+            ]
+        );
+    }
+
+    public function acceptRequest(Request $request, Response $response)
+    {
+        $id = 1; // assume auth id
+
+        $authUser = User::find($id);
+
+        // $login_token = $request->getParam('login_token');
+        // $authUser = User::findByLoginToken($login_token);
+        $from_id = $request->getParam('from_id');
+
+        $is_accepted = ContactRequest::accept($from_id, $authUser->id);
+        $notif = Notification::acceptRequestType()
+                    ->where("from_id", $from_id)
+                    ->where("to_id", $authUser->id)
+                    ->first();
+
+        return $response->withJson($is_accepted ?
+            [
+                'success' => true,
+                'message' => "Successfully accept request.",
+                'notif_message' => $notif->getMessage()
+            ] :
+            [
+                'success' => false,
+                'message' => "Cannot accept request this time. Please try again later."
             ]
         );
     }

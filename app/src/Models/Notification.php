@@ -8,7 +8,6 @@ use Core\Log;
 
 class Notification extends BaseModel
 {
-    const SEND_REQUEST_MESSAGE = "send request to you.";
     const SEND_REQUEST = "send-request";
     const ACCEPT_REQUEST = "accept-request";
     const CUSTOM = "custom";
@@ -30,31 +29,61 @@ class Notification extends BaseModel
         return $query->where("is_read", $is_read);
     }
 
-    public function getMessage()
+    public function isSendRequest()
+    {
+        return $this->type === static::SEND_REQUEST;
+    }
+
+    public function getUser()
     {
         switch ($this->type)
         {
             case static::SEND_REQUEST:
-                $from = User::find($this->from_id);
-                if (!is_null($from))
+                return User::find($this->from_id);
+
+            case static::ACCEPT_REQUEST:
+                return User::find($this->to_id);
+
+            default:
+                Log::error("Error getting user: Notification type " . $this->type . " is invalid.");
+        }
+
+        return null;
+    }
+
+    public function getMessage(User $owner)
+    {
+        $from = User::find($this->from_id);
+        $to = User::find($this->to_id);
+
+        if (is_null($from) || is_null($to))
+        {
+            Log::error("Error on getting message: Neither From ID " . $this->from_id . " nor To ID " . $this->to_id . " is invalid.");
+            return null;
+        }
+
+        switch ($this->type)
+        {
+            case static::SEND_REQUEST:
+                if ($from->getId() === $owner->getId())
                 {
-                    return $from->getFullName() . " send request to you.";
+                    return "You send request to " . $to->getFullName();
                 }
-                else
+
+                if ($to->getId() === $owner->getId())
                 {
-                    Log::error("Error getting notification message: User id " . $this->from_id . " is not exist.");
+                    return $owner->getFullName() . " send request to you.";
                 }
 
             case static::ACCEPT_REQUEST:
-                $to = User::find($this->to_id);
-
-                if (!is_null($to))
+                if ($from->getId() === $owner->getId())
                 {
-                    return $to->getFullName() . " accepted your request.";
+                    return "You and " . $to->getFullName() . " can now chat each other.";
                 }
-                else
+
+                if ($to->getId() === $owner->getId())
                 {
-                    Log::error("Error getting notification message: User id " . $this->from_id . " is not exist.");
+                    return "You and " . $from->getFullName() . " can now chat each other.";
                 }
 
             case static::CUSTOM:
@@ -69,22 +98,32 @@ class Notification extends BaseModel
 
     public static function getAll(User $user)
     {
-        return static::where(function($query) use($user) {
-                    return $query->sendRequestType()->where('to_id', $user->getId());
-                })
-                ->orWhere(function($query) use($user) {
-                    return $query->acceptRequestType()->where('from_id', $user->getId());
-                });
+        return static::where("from_id", $user->getId())
+                    ->orWhere("to_id", $user->getId());
     }
 
     public static function createSendRequest($from_id, $to_id)
     {
-        $to = User::find($to_id);
-
         return static::create([
             'from_id' => $from_id,
             'to_id' => $to_id,
             'type' => static::SEND_REQUEST,
         ]);
+    }
+
+    public static function changeToAcceptRequest($from_id, $to_id)
+    {
+        $notif = static::sendRequestType()
+                    ->where("from_id", $from_id)
+                    ->where("to_id", $to_id)
+                    ->first();
+
+        if (!is_null($notif))
+        {
+            $notif->type = static::ACCEPT_REQUEST;
+            return $notif->save();
+        }
+
+        return false;
     }
 }

@@ -710,6 +710,11 @@ body {
   outline: none;
 }
 
+// override chat css
+p {
+    line-height: normal;
+}
+
 .no-contacts {
     cursor: default !important;
 

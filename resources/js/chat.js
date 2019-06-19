@@ -39,6 +39,8 @@ var Chat = {
     $('#addcontact').click(Chat.onAddContact);
     $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(Chat.onSearchingContact, 800));
     $('body').on('click', ".add-contact-modal .send-contact-request", Chat.onSendContactRequest);
+
+    $('#notification-menu .accept-request').click(Chat.onAcceptRequest);
   },
 
   onFilterContacts: function() {
@@ -94,6 +96,20 @@ var Chat = {
       if (response.success) {
         $(_this).fadeOut(function() {
           $(this).parent().html('<span class="label label-success">Successfully sent request.</span>');
+          $(this).remove();
+        });
+      }
+    });
+  },
+
+  onAcceptRequest: function() {
+    var _this = this;
+    var from_id = $(this).data("from-id");
+
+    chatApiObj.acceptRequest(from_id, function(response) {
+      if (response.success) {
+        $(_this).fadeOut(function() {
+          $(this).prev().html(response.notif_message);
           $(this).remove();
         });
       }

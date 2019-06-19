@@ -21,6 +21,15 @@ ChatApi.prototype = {
     };
 
     $.post("/api/send-contact-request", this.csrf.mergeWithToken(params), callback);
+  },
+
+  acceptRequest: function(from_id, callback) {
+    var params = {
+      from_id: from_id,
+      login_token: this.login_token
+    };
+
+    $.post("/api/accept-request", this.csrf.mergeWithToken(params), callback);
   }
 };
 

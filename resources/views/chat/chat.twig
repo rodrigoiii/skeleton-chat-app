@@ -14,21 +14,12 @@
         <div id="sidepanel">
             <div id="profile">
                 <div class="wrap">
-                    <img id="profile-img" src="/img/fa-image.png" class="online" alt="" />
-                    <p>Mike Ross</p>
-                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
-                    <div id="expanded">
-                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mikeross" />
-                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="ross81" />
-                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mike.ross" />
-                    </div>
+                    <img id="profile-img" src="{{ authUser.getPicture(true) }}" class="online" alt="" />
+                    <p>{{ authUser.getFullName() }}</p>
                 </div>
             </div>
             <div id="search">
-                <label for=""><i class="glyphicon glyphicon-search" aria-hidden="true"></i></label>
+                <label><i class="glyphicon glyphicon-search" aria-hidden="true"></i></label>
                 <input type="text" name="filter-contacts" placeholder="Search contacts..." />
             </div>
             <div id="contacts">
@@ -80,80 +71,55 @@
                         <a href="javascript:void(0)" class="btn btn-link" data-toggle="dropdown" style="text-decoration: none;">
                             <i class="glyphicon glyphicon-bell"></i>
 
-                            {% if notifications.read(false).get().count() > 0 %}
+                            {% if notifications.read(false).get().isNotEmpty() > 0 %}
                                 <span class="badge">{{ notifications.read(false).get().count() }}</span>
                             {% endif %}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-                            {% for notification in notifications.get() %}
-                                <li><a href="#">{{ notification.getMessage() }}</a></li>
-                            {% endfor %}
+
+                        <ul class="dropdown-menu dropdown-menu-right notify-drop" id="notification-menu">
+                            {% if notifications.get().isNotEmpty() %}
+                                {% for notif in notifications.get() %}
+                                    <li>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                            <div class="notify-img">
+                                                <img src="{{ notif.getUser().getPicture(true) }}" class="img-responsive" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9 col-sm-9 col-xs-9 pd-l0">
+                                            <p>{{ notif.getMessage(authUser) }}</p>
+                                            {% if notif.isSendRequest() %}
+                                                <button class="btn btn-info btn-md accept-request" data-from-id="{{ notif.from_id }}">Accept</button>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li>
+                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0">
+                                        <p>Notification is empty</p>
+                                    </div>
+                                </li>
+                            {% endif %}
                         </ul>
+
                     </div>
 
-                    <div class="dropdown">
+                    {# <div class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notification (<b>2</b>)</a>
                         <ul class="dropdown-menu dropdown-menu-right notify-drop">
-                            <div class="notify-drop-title">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-6">Bildirimler (<b>2</b>)</div>
-                                    <div class="col-md-6 col-sm-6 col-xs-6 text-right"><a href="" class="rIcon allRead" data-tooltip="tooltip" data-placement="bottom" title="tümü okundu."><i class="fa fa-dot-circle-o"></i></a></div>
-                                </div>
-                            </div>
-                            <!-- end notify title -->
                             <!-- notify content -->
                             <div class="drop-content">
                                 <li>
                                     <div class="col-md-3 col-sm-3 col-xs-3">
                                         <div class="notify-img"><img src="http://placehold.it/45x45" alt=""></div>
                                     </div>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0"><a href="">Ahmet</a> yorumladı. <a href="">Çicek bahçeleri...</a> <a href="" class="rIcon"><i class="fa fa-dot-circle-o"></i></a>
-                                        <hr>
-                                        <p class="time">Şimdi</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <div class="notify-img"><img src="http://placehold.it/45x45" alt=""></div>
-                                    </div>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0"><a href="">Ahmet</a> yorumladı. <a href="">Çicek bahçeleri...</a> <a href="" class="rIcon"><i class="fa fa-dot-circle-o"></i></a>
+                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0">
                                         <p>Lorem ipsum sit dolor amet consilium.</p>
-                                        <p class="time">1 Saat önce</p>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <div class="notify-img"><img src="http://placehold.it/45x45" alt=""></div>
-                                    </div>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0"><a href="">Ahmet</a> yorumladı. <a href="">Çicek bahçeleri...</a> <a href="" class="rIcon"><i class="fa fa-dot-circle-o"></i></a>
-                                        <p>Lorem ipsum sit dolor amet consilium.</p>
-                                        <p class="time">29 Dakika önce</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <div class="notify-img"><img src="http://placehold.it/45x45" alt=""></div>
-                                    </div>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0"><a href="">Ahmet</a> yorumladı. <a href="">Çicek bahçeleri...</a> <a href="" class="rIcon"><i class="fa fa-dot-circle-o"></i></a>
-                                        <p>Lorem ipsum sit dolor amet consilium.</p>
-                                        <p class="time">Dün 13:18</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <div class="notify-img"><img src="http://placehold.it/45x45" alt=""></div>
-                                    </div>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0"><a href="">Ahmet</a> yorumladı. <a href="">Çicek bahçeleri...</a> <a href="" class="rIcon"><i class="fa fa-dot-circle-o"></i></a>
-                                        <p>Lorem ipsum sit dolor amet consilium.</p>
-                                        <p class="time">2 Hafta önce</p>
-                                    </div>
-                                </li>
-                            </div>
-                            <div class="notify-drop-footer text-center">
-                                <a href=""><i class="fa fa-eye"></i> Tümünü Göster</a>
                             </div>
                         </ul>
-                    </div>
+                    </div> #}
                 </div>
 
                 {# <div class="dropdown">
