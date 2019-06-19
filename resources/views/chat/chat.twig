@@ -76,26 +76,25 @@
                             {% endif %}
                         </a>
 
-                        <ul class="dropdown-menu dropdown-menu-right notify-drop" id="notification-menu">
+                        <ul class="dropdown-menu dropdown-menu-right" id="notification-menu">
                             {% if notifications.get().isNotEmpty() %}
                                 {% for notif in notifications.get() %}
                                     <li>
-                                        <div class="col-md-3 col-sm-3 col-xs-3">
-                                            <div class="notify-img">
-                                                <img src="{{ notif.getUser().getPicture(true) }}" class="img-responsive" alt="">
-                                            </div>
+                                        <a href="">Hello WOrld</a>
+                                        {# <div class="col-md-3 col-sm-3 col-xs-3">
+                                            <img src="{{ notif.getUser().getPicture(true) }}" class="img-responsive" alt="">
                                         </div>
-                                        <div class="col-md-9 col-sm-9 col-xs-9 pd-l0">
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
                                             <p>{{ notif.getMessage(authUser) }}</p>
-                                            {% if notif.isSendRequest() %}
+                                            {% if notif.isSendRequest(authUser) %}
                                                 <button class="btn btn-info btn-md accept-request" data-from-id="{{ notif.from_id }}">Accept</button>
                                             {% endif %}
-                                        </div>
+                                        </div> #}
                                     </li>
                                 {% endfor %}
                             {% else %}
                                 <li>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0">
+                                    <div class="col-md-9 col-sm-9 col-xs-9">
                                         <p>Notification is empty</p>
                                     </div>
                                 </li>
@@ -103,23 +102,6 @@
                         </ul>
 
                     </div>
-
-                    {# <div class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notification (<b>2</b>)</a>
-                        <ul class="dropdown-menu dropdown-menu-right notify-drop">
-                            <!-- notify content -->
-                            <div class="drop-content">
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <div class="notify-img"><img src="http://placehold.it/45x45" alt=""></div>
-                                    </div>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 pd-l0">
-                                        <p>Lorem ipsum sit dolor amet consilium.</p>
-                                    </div>
-                                </li>
-                            </div>
-                        </ul>
-                    </div> #}
                 </div>
 
                 {# <div class="dropdown">

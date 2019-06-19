@@ -20,7 +20,7 @@ class ChatController extends BaseController
      */
     public function index(Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 2; // assume auth id
 
         $authUser = User::find($id);
         // $contacts = $authUser->contacts;
@@ -37,7 +37,7 @@ class ChatController extends BaseController
         // $login_token = $request->getParam('login_token');
         // $authUser = User::findByLoginToken($login_token);
 
-        $id = 1; // assume auth id
+        $id = 2; // assume auth id
         $authUser = User::find($id);
 
         $keyword = $request->getParam('keyword');
@@ -62,7 +62,7 @@ class ChatController extends BaseController
 
     public function sendContactRequest(Request $request, Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 2; // assume auth id
 
         $authUser = User::find($id);
 
@@ -86,7 +86,7 @@ class ChatController extends BaseController
 
     public function acceptRequest(Request $request, Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 2; // assume auth id
 
         $authUser = User::find($id);
 

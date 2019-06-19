@@ -62,10 +62,14 @@ var Chat = {
   onAddContact: function() {
     var tmpl = _.template($('#add-contact-tmpl').html());
 
-    bootbox.dialog({
+    var box = bootbox.dialog({
       title: "Add contact",
       message: tmpl(),
       className: "add-contact-modal"
+    });
+
+    box.on("shown.bs.modal", function() {
+      $('.add-contact-modal :input[name="search_contact"]').focus();
     });
   },
 

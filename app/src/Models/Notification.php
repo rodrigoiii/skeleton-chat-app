@@ -29,9 +29,16 @@ class Notification extends BaseModel
         return $query->where("is_read", $is_read);
     }
 
-    public function isSendRequest()
+    public function isSendRequest($userReceiver=null)
     {
-        return $this->type === static::SEND_REQUEST;
+        $result = $this->type === static::SEND_REQUEST;
+
+        if (!is_null($userReceiver))
+        {
+            $result = $result && $userReceiver->getId() === $this->to_id;
+        }
+
+        return $result;
     }
 
     public function getUser()
@@ -72,7 +79,7 @@ class Notification extends BaseModel
 
                 if ($to->getId() === $owner->getId())
                 {
-                    return $owner->getFullName() . " send request to you.";
+                    return $from->getFullName() . " send request to you.";
                 }
 
             case static::ACCEPT_REQUEST:
