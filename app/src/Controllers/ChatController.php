@@ -104,7 +104,7 @@ class ChatController extends BaseController
             [
                 'success' => true,
                 'message' => "Successfully accept request.",
-                'notif_message' => $notif->getMessage()
+                'notif_message' => $notif->getMessage($authUser)
             ] :
             [
                 'success' => false,

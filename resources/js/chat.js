@@ -41,6 +41,11 @@ var Chat = {
     $('body').on('click', ".add-contact-modal .send-contact-request", Chat.onSendContactRequest);
 
     $('#notification-menu .accept-request').click(Chat.onAcceptRequest);
+
+
+    $(document).on('click', '.dropdown .dropdown-menu', function (e) {
+      e.stopPropagation();
+    });
   },
 
   onFilterContacts: function() {
@@ -110,10 +115,13 @@ var Chat = {
     var _this = this;
     var from_id = $(this).data("from-id");
 
+    $(this).prop('disabled', true);
+    $(this).button('loading');
+
     chatApiObj.acceptRequest(from_id, function(response) {
       if (response.success) {
         $(_this).fadeOut(function() {
-          $(this).prev().html(response.notif_message);
+          $(this).closest(".item").find(".item-info p").html(response.notif_message);
           $(this).remove();
         });
       }

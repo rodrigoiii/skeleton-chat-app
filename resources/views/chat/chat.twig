@@ -71,17 +71,36 @@
                         <a href="javascript:void(0)" class="btn btn-link" data-toggle="dropdown" style="text-decoration: none;">
                             <i class="glyphicon glyphicon-bell"></i>
 
-                            {% if notifications.read(false).get().isNotEmpty() > 0 %}
+                            {% if notifications.read(false).latest().get().isNotEmpty() > 0 %}
                                 <span class="badge">{{ notifications.read(false).get().count() }}</span>
                             {% endif %}
                         </a>
 
-                        <ul class="dropdown-menu dropdown-menu-right" id="notification-menu">
+                        {# <ul class="dropdown-menu dropdown-cart dropdown-menu-right" role="menu">
+                            <li>
+                                <span class="item">
+                                    <span class="item-left">
+                                        <img src="http://lorempixel.com/50/50/" alt="" />
+                                        <span class="item-info">
+                                            <span>Item name</span>
+                                            <span>23$</span>
+                                        </span>
+                                    </span>
+                                    <span class="item-right">
+                                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                                    </span>
+                                </span>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a class="text-center" href="">View Cart</a></li>
+                        </ul> #}
+
+                        <ul class="dropdown-menu dropdown-cart dropdown-menu-right" id="notification-menu">
                             {% if notifications.get().isNotEmpty() %}
                                 {% for notif in notifications.get() %}
                                     <li>
-                                        <a href="">Hello WOrld</a>
-                                        {# <div class="col-md-3 col-sm-3 col-xs-3">
+                                     {#    <a href="">Hello WOrld</a>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
                                             <img src="{{ notif.getUser().getPicture(true) }}" class="img-responsive" alt="">
                                         </div>
                                         <div class="col-md-9 col-sm-9 col-xs-9">
@@ -89,7 +108,21 @@
                                             {% if notif.isSendRequest(authUser) %}
                                                 <button class="btn btn-info btn-md accept-request" data-from-id="{{ notif.from_id }}">Accept</button>
                                             {% endif %}
-                                        </div> #}
+                                        </div>#}
+
+                                        <span class="item">
+                                            <span class="item-left">
+                                                <img src="{{ notif.getUser().getPicture(true) }}" alt="" />
+                                                <span class="item-info">
+                                                    <p>{{ notif.getMessage(authUser) }}</p>
+                                                </span>
+                                            </span>
+                                            <span class="item-right">
+                                                {% if notif.isSendRequest(authUser) %}
+                                                    <button class="btn btn-info btn-xs accept-request pull-right" data-from-id="{{ notif.from_id }}" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
+                                                {% endif %}
+                                            </span>
+                                        </span>
                                     </li>
                                 {% endfor %}
                             {% else %}
@@ -97,10 +130,15 @@
                                     <div class="col-md-9 col-sm-9 col-xs-9">
                                         <p>Notification is empty</p>
                                     </div>
+
+                                    <span class="item">
+                                        <span class="item-left">
+                                            <p>Notification is empty</p>
+                                        </span>
+                                    </span>
                                 </li>
                             {% endif %}
                         </ul>
-
                     </div>
                 </div>
 
