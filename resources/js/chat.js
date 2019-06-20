@@ -42,8 +42,8 @@ var Chat = {
 
     $('#notification-menu .accept-request').click(Chat.onAcceptRequest);
 
-
-    $(document).on('click', '.dropdown .dropdown-menu', function (e) {
+    $("#notification-dropdown").on("shown.bs.dropdown", Chat.onReadNotification);
+    $(document).on('click', '#notification-dropdown .dropdown-menu', function (e) {
       e.stopPropagation();
     });
   },
@@ -126,6 +126,21 @@ var Chat = {
         });
       }
     });
+  },
+
+  onReadNotification: function() {
+    var badge_el = $('a span', $(this));
+    var notif_num = badge_el.text();
+
+    if (!isNaN(notif_num)) {
+      if (parseInt(notif_num) > 0) {
+        chatApiObj.readNotification(function(response) {
+          if (response.success) {
+            badge_el.remove();
+          }
+        });
+      }
+    }
   }
 };
 

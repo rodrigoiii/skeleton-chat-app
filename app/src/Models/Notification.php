@@ -11,6 +11,8 @@ class Notification extends BaseModel
     const SEND_REQUEST = "send-request";
     const ACCEPT_REQUEST = "accept-request";
     const CUSTOM = "custom";
+    const IS_UNREAD = 0;
+    const IS_READ = 1;
 
     protected $fillable = ["from_id", "to_id", "type", "message", "is_read"];
 
@@ -24,16 +26,23 @@ class Notification extends BaseModel
         return $query->where("type", static::ACCEPT_REQUEST);
     }
 
-    public function scopeRead($query, $is_read=true)
+    public function scopeRead($query, $is_read=true, $userReceiver=null)
     {
-        return $query->where("is_read", $is_read);
+        $query = $query->where("is_read", $is_read);
+
+        if ($userReceiver instanceof User)
+        {
+            $query = $query->where("to_id", $userReceiver->getId());
+        }
+
+        return $query;
     }
 
     public function isSendRequest($userReceiver=null)
     {
         $result = $this->type === static::SEND_REQUEST;
 
-        if (!is_null($userReceiver))
+        if ($userReceiver instanceof User)
         {
             $result = $result && $userReceiver->getId() === $this->to_id;
         }
@@ -118,7 +127,7 @@ class Notification extends BaseModel
         ]);
     }
 
-    public static function changeToAcceptRequest($from_id, $to_id)
+    public static function changeToAcceptRequest($from_id, $to_id, $markAsUnread=true)
     {
         $notif = static::sendRequestType()
                     ->where("from_id", $from_id)
@@ -127,8 +136,26 @@ class Notification extends BaseModel
 
         if (!is_null($notif))
         {
+            if ($markAsUnread) {
+                $notif->is_read = static::IS_UNREAD;
+            }
+
             $notif->type = static::ACCEPT_REQUEST;
             return $notif->save();
+        }
+
+        return false;
+    }
+
+    public static function markAsRead($from_id=null, $to_id=null)
+    {
+        $notifs = static::where("from_id", $from_id)
+                    ->orWhere("to_id", $to_id);
+
+        if ($notifs->get()->isNotEmpty())
+        {
+            $is_updated = $notifs->update(['is_read' => static::IS_READ]);
+            return $is_updated;
         }
 
         return false;

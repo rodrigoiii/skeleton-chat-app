@@ -20,16 +20,19 @@ class ChatController extends BaseController
      */
     public function index(Response $response)
     {
-        $id = 2; // assume auth id
+        $id = 1; // assume auth id
 
         $authUser = User::find($id);
         // $contacts = $authUser->contacts;
         // $notifications = $authUser->notifications();
 
-        $notifications = Notification::getAll($authUser);
+        $notifications = Notification::getAll($authUser)->latest();
+
+        $notifClone = clone $notifications;
+        $notif_num = $notifClone->read(false, $authUser)->get()->count();
 
         // remove authUser after when skeleton auth used
-        return $this->view->render($response, "chat/chat.twig", compact("authUser", "contacts", "notifications"));
+        return $this->view->render($response, "chat/chat.twig", compact("authUser", "contacts", "notifications", "notif_num"));
     }
 
     public function searchContacts(Request $request, Response $response)
@@ -37,7 +40,7 @@ class ChatController extends BaseController
         // $login_token = $request->getParam('login_token');
         // $authUser = User::findByLoginToken($login_token);
 
-        $id = 2; // assume auth id
+        $id = 1; // assume auth id
         $authUser = User::find($id);
 
         $keyword = $request->getParam('keyword');
@@ -62,7 +65,7 @@ class ChatController extends BaseController
 
     public function sendContactRequest(Request $request, Response $response)
     {
-        $id = 2; // assume auth id
+        $id = 1; // assume auth id
 
         $authUser = User::find($id);
 
@@ -86,7 +89,7 @@ class ChatController extends BaseController
 
     public function acceptRequest(Request $request, Response $response)
     {
-        $id = 2; // assume auth id
+        $id = 1; // assume auth id
 
         $authUser = User::find($id);
 
@@ -109,6 +112,29 @@ class ChatController extends BaseController
             [
                 'success' => false,
                 'message' => "Cannot accept request this time. Please try again later."
+            ]
+        );
+    }
+
+    public function readNotification(Request $request, Response $response)
+    {
+        $id = 1; // assume auth id
+
+        $authUser = User::find($id);
+
+        // $login_token = $request->getParam('login_token');
+        // $authUser = User::findByLoginToken($login_token);
+
+        $changed = Notification::markAsRead(null, $authUser->id);
+
+        return $response->withJson($changed ?
+            [
+                'success' => true,
+                'message' => "Successfully mark notification as read."
+            ] :
+            [
+                'success' => false,
+                'message' => "Cannot mark notification as read this time. Please try again later."
             ]
         );
     }

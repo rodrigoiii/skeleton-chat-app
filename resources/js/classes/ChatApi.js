@@ -30,6 +30,14 @@ ChatApi.prototype = {
     };
 
     $.post("/api/accept-request", this.csrf.mergeWithToken(params), callback);
+  },
+
+  readNotification: function(callback) {
+    var params = {
+      login_token: this.login_token
+    };
+
+    $.post("/api/read-notification", this.csrf.mergeWithToken(params), callback);
   }
 };
 

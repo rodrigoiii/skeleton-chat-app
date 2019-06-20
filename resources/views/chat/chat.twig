@@ -67,12 +67,12 @@
                 <p>Harvey Specter</p>
 
                 <div class="menu-icons">
-                    <div class="dropdown">
+                    <div class="dropdown" id="notification-dropdown">
                         <a href="javascript:void(0)" class="btn btn-link" data-toggle="dropdown" style="text-decoration: none;">
                             <i class="glyphicon glyphicon-bell"></i>
 
-                            {% if notifications.read(false).latest().get().isNotEmpty() > 0 %}
-                                <span class="badge">{{ notifications.read(false).get().count() }}</span>
+                            {% if notif_num > 0 %}
+                                <span class="badge">{{ notif_num }}</span>
                             {% endif %}
                         </a>
 
@@ -127,10 +127,6 @@
                                 {% endfor %}
                             {% else %}
                                 <li>
-                                    <div class="col-md-9 col-sm-9 col-xs-9">
-                                        <p>Notification is empty</p>
-                                    </div>
-
                                     <span class="item">
                                         <span class="item-left">
                                             <p>Notification is empty</p>
