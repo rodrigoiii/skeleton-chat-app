@@ -18,11 +18,6 @@ class User extends BaseModel
 
     const PLACEHOLDER_IMAGE = "/img/fa-image.png";
 
-    public function contacts()
-    {
-        return $this->hasMany(Contact::class, "user_id");
-    }
-
     public function setLoginToken($login_token)
     {
         $this->login_token = $login_token;

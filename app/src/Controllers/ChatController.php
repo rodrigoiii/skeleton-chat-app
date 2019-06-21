@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Contact;
 use App\Models\ContactRequest;
 use App\Models\Notification;
 use App\Models\User;
@@ -23,7 +24,7 @@ class ChatController extends BaseController
         $id = 3; // assume auth id
 
         $authUser = User::find($id);
-        // $contacts = $authUser->contacts;
+        $contacts = Contact::contacts($authUser)->get();
         // $notifications = $authUser->notifications();
 
         $notifications = Notification::getAll($authUser)->latest();

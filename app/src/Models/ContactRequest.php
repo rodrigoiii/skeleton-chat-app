@@ -49,9 +49,15 @@ class ContactRequest extends BaseModel
         if (!is_null($contactRequest))
         {
             $contactRequest->is_accepted = true;
-            $is_saved = $contactRequest->save();
+            $is_accepted = $contactRequest->save();
 
-            if ($is_saved)
+            $contact = Contact::create([
+                'contact_id' => $to_id,
+                'user_id' => $from_id
+            ]);
+            $is_saved = $contact instanceof Contact;
+
+            if ($is_accepted && $is_saved)
             {
                 if ($notif)
                 {
