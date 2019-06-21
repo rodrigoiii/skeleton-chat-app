@@ -9,6 +9,11 @@ class Contact extends BaseModel
 {
     protected $fillable = ["contact_id", "user_id"];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public static function contacts(User $user)
     {
         return static::where('contact_id', $user->getId())
