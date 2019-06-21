@@ -19,6 +19,9 @@ $dotEnv->required("USE_DIST")->isBoolean();
 $dotEnv->required("APP_STATUS_UP")->isBoolean();
 $dotEnv->required("DEBUG_BAR_ON")->isBoolean();
 
+$dotEnv->required("CHAT_HOST");
+$dotEnv->required("CHAT_PORT")->isInteger();
+
 # application instance
 $app = new Core\App;
 $app->loadDatabaseConnection();

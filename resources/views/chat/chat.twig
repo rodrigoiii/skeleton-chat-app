@@ -151,6 +151,8 @@
                     <input type="text" placeholder="Write your message..." />
                     <button class="submit"><i class="glyphicon glyphicon-send" aria-hidden="true"></i></button>
                 </div>
+
+                <div class="reconnecting-container" style="display: none">Reconnecting ...</div>
             </div>
         </div>
     </div>
@@ -162,9 +164,13 @@
 
     <script type="text/javascript">
         window.chatObj = {
+            config: {
+                host: "{{ config('chat.host') }}",
+                port: "{{ config('chat.port') }}",
+            },
             login_token: "{{ authUser.login_token }}"
         };
     </script>
-    <script type="text/javascript" src="/js/chat.js"></script>
+    <script type="text/javascript" src="/js/chat-app.js"></script>
 </body>
 </html>

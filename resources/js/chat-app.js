@@ -29,20 +29,32 @@ require("bootstrap/js/dropdown");
 require("bootstrap/js/button");
 
 var _ = require("underscore");
-var ChatApi = require("./classes/ChatApi");
+var ChatApi = require("./classes/Chat/Api");
+var Emitter = require("./classes/Chat/Emitter");
 
-var Chat = {
+/**
+ * global object
+ * - chatObj
+ */
+var ChatApp = {
   init: function() {
-    window.chatApiObj = new ChatApi("sample token");
+    window.chatApiObj = new ChatApi(chatObj.login_token);
 
-    $('#search :input[name="filter-contacts"]').keyup(Chat.onFilterContacts);
-    $('#addcontact').click(Chat.onAddContact);
-    $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(Chat.onSearchingContact, 800));
-    $('body').on('click', ".add-contact-modal .send-contact-request", Chat.onSendContactRequest);
+    var eventHandler = new EventHandler({
+      host: chatObj.config.host,
+      port: chatObj.config.port,
+      login_token: chatObj.login_token
+    });
+    eventHandler.connect();
 
-    $('#notification-menu .accept-request').click(Chat.onAcceptRequest);
+    $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
+    $('#addcontact').click(ChatApp.onAddContact);
+    $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(ChatApp.onSearchingContact, 800));
+    $('body').on('click', ".add-contact-modal .send-contact-request", ChatApp.onSendContactRequest);
 
-    $("#notification-dropdown").on("shown.bs.dropdown", Chat.onReadNotification);
+    $('#notification-menu .accept-request').click(ChatApp.onAcceptRequest);
+
+    $("#notification-dropdown").on("shown.bs.dropdown", ChatApp.onReadNotification);
     $(document).on('click', '#notification-dropdown .dropdown-menu', function (e) {
       e.stopPropagation();
     });
@@ -144,4 +156,75 @@ var Chat = {
   }
 };
 
-$(document).ready(Chat.init);
+function EventHandler(config) {
+  this.config = config;
+}
+
+EventHandler.prototype = {
+  connect: function() {
+    this.emitter = new Emitter(this);
+  },
+
+  disconnected: function() { // interface
+    $('.reconnecting-container').html("Disconnected!").show();
+    this.reConnect();
+  },
+
+  reConnect: function() {
+    var _this = this;
+
+    this.emitter = null;
+
+    var countdown = 5; // seconds
+    var time = setInterval(function () {
+      if (countdown !== 0) {
+        $('.reconnecting-container').html("Reconnecting... " + countdown).show();
+        countdown -= 1;
+      } else {
+        _this.connect();
+        clearInterval(time);
+      }
+    }, 1000);
+  }
+};
+
+// Asynchronous handlers
+_.extend(EventHandler.prototype, {
+  onConnectionEstablish: function() {
+    console.log("connection establish");
+  }
+});
+
+// var EventHandler = {
+//   connect: function() {
+//     Chat.emitter = null;
+
+//     var reconnect_countdown = 5000;
+
+//     var reconnectTime = setInterval(function () {
+//       if (reconnect_countdown !== 0) {
+//         console.log("Reconnecting... " + (reconnect_countdown/1000));
+//         reconnect_countdown -= 1000;
+//       } else {
+//         Chat.emitter = new Emitter(EventHandler, {
+//           host: sklt_chat.host,
+//           port: sklt_chat.port,
+//           login_token: sklt_chat.login_token,
+//         });
+
+//         clearInterval(reconnectTime);
+//       }
+//     }, 1000);
+//   },
+
+//   onConnected: function() { // interface
+
+//   },
+
+//   onDisconnected: function() { // interface
+//     // reconnect
+//     EventHandler.connect();
+//   }
+// };
+
+$(document).ready(ChatApp.init);

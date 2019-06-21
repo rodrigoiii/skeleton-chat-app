@@ -10,5 +10,5 @@ return [
         'under_construction' => "errors/under-construction.twig"
     ],
 
-    'functions' => ["str_title"]
+    'functions' => ["str_title", "config"]
 ];

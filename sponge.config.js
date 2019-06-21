@@ -18,7 +18,7 @@ module.exports = {
       "auth/helpers/quick-load-image",
 
       "app",
-      "chat"
+      "chat-app"
     ],
     dest: "public/js",
     options: {

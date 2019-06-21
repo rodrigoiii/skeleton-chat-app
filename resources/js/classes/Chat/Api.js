@@ -1,5 +1,5 @@
 // require jquery
-var Csrf = require("./Csrf");
+var Csrf = require("./../Csrf");
 
 function ChatApi(login_token) {
   this.login_token = login_token;
