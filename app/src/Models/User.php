@@ -18,6 +18,11 @@ class User extends BaseModel
 
     const PLACEHOLDER_IMAGE = "/img/fa-image.png";
 
+    public function chatStatus()
+    {
+        return $this->hasOne(ChatStatus::class);
+    }
+
     public function setLoginToken($login_token)
     {
         $this->login_token = $login_token;

@@ -58,13 +58,15 @@
             </div>
             <div id="bottom-bar">
                 <button id="addcontact"><i class="glyphicon glyphicon-plus" aria-hidden="true"></i> <span>Add contact</span></button>
-                <a href="{{ path_for('auth.account-settings') }}"><i class="glyphicon glyphicon-wrench" aria-hidden="true"></i> <span>Settings</span></a>
+                <a href="{{ path_for('auth.account-settings') }}" style="text-decoration: none;"><i class="glyphicon glyphicon-wrench" aria-hidden="true"></i> <span>Settings</span></a>
             </div>
         </div>
         <div class="content">
             <div class="contact-profile">
-                <img src="/img/fa-image.png" alt="" />
-                <p>Harvey Specter</p>
+                <div class="active-contact">
+                    <img src="/img/fa-image.png" alt="" />
+                    <p>Harvey Specter</p>
+                </div>
 
                 <div class="menu-icons">
                     <div class="dropdown" id="notification-dropdown">
@@ -80,17 +82,6 @@
                             {% if notifications.get().isNotEmpty() %}
                                 {% for notif in notifications.get() %}
                                     <li>
-                                     {#    <a href="">Hello WOrld</a>
-                                        <div class="col-md-3 col-sm-3 col-xs-3">
-                                            <img src="{{ notif.getUser().getPicture(true) }}" class="img-responsive" alt="">
-                                        </div>
-                                        <div class="col-md-9 col-sm-9 col-xs-9">
-                                            <p>{{ notif.getMessage(authUser) }}</p>
-                                            {% if notif.isSendRequest(authUser) %}
-                                                <button class="btn btn-info btn-md accept-request" data-from-id="{{ notif.from_id }}">Accept</button>
-                                            {% endif %}
-                                        </div>#}
-
                                         <span class="item">
                                             <span class="item-left">
                                                 <img src="{{ notif.getUser().getPicture(true) }}" alt="" />
@@ -169,6 +160,11 @@
 
     {% include "chat/templates.twig" %}
 
+    <script type="text/javascript">
+        window.chatObj = {
+            login_token: "{{ authUser.login_token }}"
+        };
+    </script>
     <script type="text/javascript" src="/js/chat.js"></script>
 </body>
 </html>

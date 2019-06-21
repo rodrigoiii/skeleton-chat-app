@@ -3,6 +3,7 @@
 namespace App\Controllers\Auth;
 
 use App\Auth\Auth;
+use App\Models\ChatStatus;
 use App\Requests\LoginRequest;
 use Core\BaseController;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -35,8 +36,11 @@ class LoginController extends BaseController
             // login the user
             Auth::logInByUserId($user->getId());
 
-            $this->flash->addMessage('success', "Successfully login!");
-            return $response->withRedirect($this->router->pathFor('auth.home'));
+            if (!is_null($user->chatStatus)) $user->chatStatus->setAsOnline();
+            else ChatStatus::createOnlineUser($user);
+
+            // $this->flash->addMessage('success', "Successfully login!");
+            return $response->withRedirect($this->router->pathFor('chat'));
         }
 
         $this->flash->addMessage('danger', "Invalid email or password!");
@@ -51,6 +55,9 @@ class LoginController extends BaseController
      */
     public function logout(Response $response)
     {
+        $authUser = Auth::user();
+        $authUser->chatStatus->setAsOffline();
+
         Auth::logOut();
         return $response->withRedirect($this->router->pathFor('auth.login'));
     }

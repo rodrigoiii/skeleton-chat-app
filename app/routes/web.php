@@ -3,8 +3,8 @@
 /**
  * Register your routes here ...
  */
-$app->get('/', ["ChatController", "index"]);
-    // ->add("Auth\\UserMiddleware");
+$app->get('/', ["ChatController", "index"])
+    ->add("Auth\\UserMiddleware")->setName("chat");
 
 $app->group("/auth", function() {
     $this->group("/login", function() {

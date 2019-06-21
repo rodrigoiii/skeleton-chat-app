@@ -21,7 +21,7 @@ trait User
     {
         if (Auth::check())
         {
-            $this->view->getEnvironment()->addGlobal('auth_user', Auth::user());
+            $this->view->getEnvironment()->addGlobal('authUser', Auth::user());
             return $next($request, $response);
         }
 
