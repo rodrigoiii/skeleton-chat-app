@@ -76,25 +76,6 @@
                             {% endif %}
                         </a>
 
-                        {# <ul class="dropdown-menu dropdown-cart dropdown-menu-right" role="menu">
-                            <li>
-                                <span class="item">
-                                    <span class="item-left">
-                                        <img src="http://lorempixel.com/50/50/" alt="" />
-                                        <span class="item-info">
-                                            <span>Item name</span>
-                                            <span>23$</span>
-                                        </span>
-                                    </span>
-                                    <span class="item-right">
-                                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                                    </span>
-                                </span>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a class="text-center" href="">View Cart</a></li>
-                        </ul> #}
-
                         <ul class="dropdown-menu dropdown-cart dropdown-menu-right" id="notification-menu">
                             {% if notifications.get().isNotEmpty() %}
                                 {% for notif in notifications.get() %}
@@ -137,20 +118,6 @@
                         </ul>
                     </div>
                 </div>
-
-                {# <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Dropdown
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </div> #}
             </div>
             <div class="messages">
                 <ul>

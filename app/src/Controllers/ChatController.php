@@ -20,16 +20,14 @@ class ChatController extends BaseController
      */
     public function index(Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 3; // assume auth id
 
         $authUser = User::find($id);
         // $contacts = $authUser->contacts;
         // $notifications = $authUser->notifications();
 
         $notifications = Notification::getAll($authUser)->latest();
-
-        $notifClone = clone $notifications;
-        $notif_num = $notifClone->read(false, $authUser)->get()->count();
+        $notif_num = Notification::numOfUnread($authUser);
 
         // remove authUser after when skeleton auth used
         return $this->view->render($response, "chat/chat.twig", compact("authUser", "contacts", "notifications", "notif_num"));
@@ -40,7 +38,7 @@ class ChatController extends BaseController
         // $login_token = $request->getParam('login_token');
         // $authUser = User::findByLoginToken($login_token);
 
-        $id = 1; // assume auth id
+        $id = 3; // assume auth id
         $authUser = User::find($id);
 
         $keyword = $request->getParam('keyword');
@@ -65,7 +63,7 @@ class ChatController extends BaseController
 
     public function sendContactRequest(Request $request, Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 3; // assume auth id
 
         $authUser = User::find($id);
 
@@ -89,7 +87,7 @@ class ChatController extends BaseController
 
     public function acceptRequest(Request $request, Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 3; // assume auth id
 
         $authUser = User::find($id);
 
@@ -118,14 +116,14 @@ class ChatController extends BaseController
 
     public function readNotification(Request $request, Response $response)
     {
-        $id = 1; // assume auth id
+        $id = 3; // assume auth id
 
         $authUser = User::find($id);
 
         // $login_token = $request->getParam('login_token');
         // $authUser = User::findByLoginToken($login_token);
 
-        $changed = Notification::markAsRead(null, $authUser->id);
+        $changed = Notification::markAsRead($authUser);
 
         return $response->withJson($changed ?
             [

@@ -26,16 +26,19 @@ class Notification extends BaseModel
         return $query->where("type", static::ACCEPT_REQUEST);
     }
 
-    public function scopeRead($query, $is_read=true, $userReceiver=null)
+    public function scopeRead($query, $is_read=true)
     {
-        $query = $query->where("is_read", $is_read);
+        return $query->where("is_read", $is_read);
+    }
 
-        if ($userReceiver instanceof User)
-        {
-            $query = $query->where("to_id", $userReceiver->getId());
-        }
+    public function scopeFrom($query, User $user)
+    {
+        return $query->where("from_id", $user->getId());
+    }
 
-        return $query;
+    public function scopeTo($query, User $user)
+    {
+        return $query->where("to_id", $user->getId());
     }
 
     public function isSendRequest($userReceiver=null)
@@ -147,10 +150,9 @@ class Notification extends BaseModel
         return false;
     }
 
-    public static function markAsRead($from_id=null, $to_id=null)
+    public static function markAsRead(User $user)
     {
-        $notifs = static::where("from_id", $from_id)
-                    ->orWhere("to_id", $to_id);
+        $notifs = static::getUnread($user);
 
         if ($notifs->get()->isNotEmpty())
         {
@@ -159,5 +161,25 @@ class Notification extends BaseModel
         }
 
         return false;
+    }
+
+    public static function getUnread(User $user)
+    {
+        return static::where(function($query) use($user) {
+                    return $query->sendRequestType()
+                                ->read(false)
+                                ->to($user);
+                })->orWhere(function($query) use($user) {
+                    return $query->acceptRequestType()
+                            ->read(false)
+                            ->from($user);
+                });
+    }
+
+    public static function numOfUnread(User $user)
+    {
+        return static::getUnread($user)
+                ->get()
+                ->count();
     }
 }
