@@ -46,7 +46,7 @@ class Chat extends EventHandler implements MessageComponentInterface {
         $key = array_search($conn, $this->clients);
         unset($this->clients[$key]);
 
-        $this->onDisconnect($conn, "");
+        $this->onDisconnected($conn, "");
 
         echo "Clients number: " . count($this->clients) . PHP_EOL;
         echo "Connection (".$conn->resourceId.") has disconnected\n";

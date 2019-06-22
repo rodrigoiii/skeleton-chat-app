@@ -17,12 +17,12 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                {% include "auth/templates/image-field.twig" with {field_name: "picture", enabledQuickLoadImage: true, img_src: auth_user.picture} %}
-                                {% include "auth/templates/field.twig" with {field_name: "first_name", field_value: auth_user.first_name} %}
-                                {% include "auth/templates/field.twig" with {field_name: "last_name", field_value: auth_user.last_name} %}
+                                {% include "auth/templates/image-field.twig" with {field_name: "picture", enabledQuickLoadImage: true, img_src: authUser.picture} %}
+                                {% include "auth/templates/field.twig" with {field_name: "first_name", field_value: authUser.first_name} %}
+                                {% include "auth/templates/field.twig" with {field_name: "last_name", field_value: authUser.last_name} %}
 
                                 <label for="email">Email</label>
-                                <input type="text" class="form-control" value="{{ auth_user.email }}" disabled />
+                                <input type="text" class="form-control" value="{{ authUser.email }}" disabled />
                             </div>
                         </div>
                     </div>
@@ -50,14 +50,6 @@
 <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="/node_modules/jquery-validation/dist/jquery.validate.js"></script>
 <script type="text/javascript" src="/node_modules/jquery-validation/dist/additional-methods.js"></script>
-
-<script type="text/javascript">
-    window.account_setting = {
-        auth_user: {
-            email: "{{ auth_user.email }}"
-        }
-    };
-</script>
 
 <script type="text/javascript" src="/js/auth/helpers/quick-load-image.js"></script>
 <script type="text/javascript" src="/js/auth/jquery-validation/add-methods.js"></script>

@@ -14,7 +14,7 @@ class EventHandler
         $this->clients = [];
     }
 
-    public function onConnectionEstablish(ConnectionInterface $from, $msg)
+    public function onConnected(ConnectionInterface $from, $msg)
     {
         parse_str($from->httpRequest->getUri()->getQuery(), $params);
 
@@ -28,19 +28,23 @@ class EventHandler
                 if (!is_null($authUser->chatStatus)) $authUser->chatStatus->setAsOnline();
                 else ChatStatus::createOnlineUser($authUser);
 
-                $return_data = [
-                    'event' => __FUNCTION__,
-                    'success' => !is_null($result),
-                    'auth_user_id' => $authUser->getId(),
-                    'token' => User::find($user_id)->login_token
-                ];
+                $receiver = User::find($user_id);
 
-                $client->send(json_encode($return_data));
+                if (!is_null($receiver))
+                {
+                    $return_data = [
+                        'event' => __FUNCTION__,
+                        'emitter_id' => $authUser->getId(),
+                        'receiver_token' => $receiver->login_token
+                    ];
+
+                    $client->send(json_encode($return_data));
+                }
             }
         }
     }
 
-    public function onDisconnect(ConnectionInterface $from, $msg)
+    public function onDisconnected(ConnectionInterface $from, $msg)
     {
         parse_str($from->httpRequest->getUri()->getQuery(), $params);
 
@@ -54,15 +58,43 @@ class EventHandler
                 if (!is_null($authUser->chatStatus)) $authUser->chatStatus->setAsOnline();
                 else ChatStatus::createOnlineUser($authUser);
 
-                $return_data = [
-                    'event' => __FUNCTION__,
-                    'success' => !is_null($result),
-                    'auth_user_id' => $authUser->getId(),
-                    'token' => User::find($user_id)->login_token
-                ];
+                $receiver = User::find($user_id);
 
-                $client->send(json_encode($return_data));
+                if (!is_null($receiver))
+                {
+                    $return_data = [
+                        'event' => __FUNCTION__,
+                        'emitter_id' => $authUser->getId(),
+                        'receiver_token' => $receiver->login_token
+                    ];
+
+                    $client->send(json_encode($return_data));
+                }
             }
+        }
+    }
+
+    public function onTyping(ConnectionInterface $from, $msg)
+    {
+        parse_str($from->httpRequest->getUri()->getQuery(), $params);
+
+        $authUser = User::findByLoginToken($params['login_token']);
+        $chattingTo = User::find($msg->chatting_to_id);
+
+        // if chatting to is online
+        if (isset($this->clients[$msg->chatting_to_id]))
+        {
+            $return_data = [
+                'event' => __FUNCTION__,
+                // 'chatting_from' => [
+                //     'id' => $authUser->id,
+                //     'picture' => $authUser->picture
+                // ],
+                'receiver_token' => $receiver->login_token
+            ];
+
+            $chattingToSocket = $this->clients[$msg->chatting_to_id];
+            $chattingToSocket->send(json_encode($return_data));
         }
     }
 }

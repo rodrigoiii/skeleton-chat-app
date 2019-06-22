@@ -26,12 +26,13 @@
                 <ul>
                     {% if contacts.isNotEmpty() %}
                         {% for contact in contacts %}
-                            <li class="contact">
+                            {% set contact = contact.contactA(authUser).first() %}
+                            <li class="contact" data-id="{{ contact.getId() }}">
                                 <div class="wrap">
-                                    <span class="contact-status online"></span>
-                                    <img src="{{ contact.user.getPicture(true) }}" alt="" />
+                                    <span class="contact-status {{ contact.chatStatus.isOnline() ? "online" }}"></span>
+                                    <img src="{{ contact.getPicture(true) }}" alt="" />
                                     <div class="meta">
-                                        <p class="name">{{ contact.user.getFullName() }}</p>
+                                        <p class="name">{{ contact.getFullName() }}</p>
                                         <p class="preview">Todo: preview message</p>
                                     </div>
                                 </div>
@@ -171,6 +172,6 @@
             login_token: "{{ authUser.login_token }}"
         };
     </script>
-    <script type="text/javascript" src="/js/chat-app.js"></script>
+    <script type="text/javascript" src="/js/chat/chat-app.js"></script>
 </body>
 </html>

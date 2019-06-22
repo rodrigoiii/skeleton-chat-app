@@ -11,6 +11,11 @@ class ChatStatus extends BaseModel
 
     protected $fillable = ["status", "user_id"];
 
+    public function isOnline()
+    {
+        return $this->status === static::ONLINE;
+    }
+
     public function setAsOnline()
     {
         $this->status = static::ONLINE;

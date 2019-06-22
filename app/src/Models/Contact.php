@@ -9,9 +9,18 @@ class Contact extends BaseModel
 {
     protected $fillable = ["contact_id", "user_id"];
 
-    public function user()
+    public function contactA(User $owner)
     {
-        return $this->belongsTo(User::class);
+        switch ($owner->getId()) {
+            case $this->contact_id:
+                return $this->belongsTo(User::class, "user_id");
+
+            case $this->user_id:
+                return $this->belongsTo(User::class, "contact_id");
+
+            default:
+                return null;
+        }
     }
 
     public static function contacts(User $user)
