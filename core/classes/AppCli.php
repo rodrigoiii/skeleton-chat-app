@@ -96,38 +96,36 @@ class AppCli
     }
 
     /**
-     * Push all commands on app/Commands directory to $commands variable.
+     * Push all commands from app/Commands directory to $commands variable.
      * @param  array  &$commands
      * @return void
      */
     private function pushCommands(array &$commands)
     {
-        $glob_path = glob(app_path('src/Commands/*.php'));
+        $appCommands = glob(app_path('src/Commands/*.php'));
 
-        $commands = array_map(function($absolute_path_file) {
-            $base_file = basename($absolute_path_file, ".php");
-
+        foreach ($appCommands as $command) {
+            $base_file = basename($command, ".php");
             $command_class = get_app_namespace() . "Commands\\" . $base_file;
 
-            return new $command_class;
-        }, $glob_path);
+            array_push($commands, new $command_class);
+        }
     }
 
     /**
-     * Push all commands on core/classes/Console/Commands directory to $commands variable.
+     * Push all commands from core/classes/Console/Commands directory to $commands variable.
      * @param  array  &$commands
      * @return void
      */
     private function pushFoundationCommands(array &$commands)
     {
-        $glob_path = glob(core_path('classes/Console/Commands/*.php'));
+        $foundationCommands = glob(core_path('classes/Console/Commands/*.php'));
 
-        $commands = array_map(function($absolute_path_file) {
-            $base_file = basename($absolute_path_file, ".php");
-
+        foreach ($foundationCommands as $command) {
+            $base_file = basename($command, ".php");
             $command_class = "Core\Console\Commands\\" . $base_file;
 
-            return new $command_class;
-        }, $glob_path);
+            array_push($commands, new $command_class);
+        }
     }
 }
