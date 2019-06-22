@@ -43,7 +43,7 @@ class RunChatServerCommand extends BaseCommand
      */
     public function handle(Input $input, Output $output)
     {
-        $config = config('sklt-chat');
+        $config = config('chat');
 
         $host = $config['host'];
         $port = $config['port'];

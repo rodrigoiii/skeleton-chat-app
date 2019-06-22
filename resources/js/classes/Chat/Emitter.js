@@ -3,6 +3,7 @@ function Emitter(eventHandler) {
   var webSocket = new WebSocket("ws://" + config.host + ":" + config.port + "?login_token=" + config.login_token);
 
   webSocket.onopen = function(e) {
+    eventHandler.connected();
     this.send(JSON.stringify({ event: Emitter.ON_CONNECTION_ESTABLISH }));
   };
 

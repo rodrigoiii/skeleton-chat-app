@@ -165,6 +165,12 @@ EventHandler.prototype = {
     this.emitter = new Emitter(this);
   },
 
+  connected: function() { // interface
+    if ($('.reconnecting-container').is(":visible")) {
+      $('.reconnecting-container').hide();
+    }
+  },
+
   disconnected: function() { // interface
     $('.reconnecting-container').html("Disconnected!").show();
     this.reConnect();

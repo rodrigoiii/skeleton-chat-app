@@ -55,4 +55,9 @@ class User extends BaseModel
     {
         return static::where('email', $email)->first();
     }
+
+    public static function findByLoginToken($login_token)
+    {
+        return static::where('login_token', $login_token)->first();
+    }
 }
