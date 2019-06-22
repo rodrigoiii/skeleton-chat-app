@@ -68,6 +68,16 @@ abstract class BaseRequest
     }
 
     /**
+     * Invoke the request object.
+     *
+     * @return Request
+     */
+    public function __invoke()
+    {
+        return $this->request;
+    }
+
+    /**
      * Put all fails in session
      * @param  Psr\Http\Message\RequestInterface $request
      * @param  array $rules
