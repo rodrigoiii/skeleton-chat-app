@@ -59,6 +59,12 @@ class User extends BaseModel
         return $is_sent ? $message : false;
     }
 
+    public function eraseLoginToken()
+    {
+        $this->login_token = null;
+        return $this->save();
+    }
+
     public static function findByEmail($email)
     {
         return static::where('email', $email)->first();
