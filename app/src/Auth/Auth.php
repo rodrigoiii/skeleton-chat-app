@@ -124,18 +124,16 @@ class Auth
 
                         $is_token_expired = $diff >= config("auth.login.session_lifespan");
 
-                        if ($is_token_expired)
+                        if (!$is_token_expired)
                         {
-                            Session::set('logout_session_expired', true);
-                            goto logout;
+                            return true;
                         }
+
+                        Session::set('logout_session_expired', true);
                     }
                 }
-
-                return true;
             }
 
-            logout:
             static::logout();
         }
 
