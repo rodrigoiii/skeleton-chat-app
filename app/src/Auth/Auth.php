@@ -89,6 +89,7 @@ class Auth
         {
             Log::info("Logout: ". $user->getFullName());
             Session::destroy(['user_auth_id', 'user_logged_in_token', 'user_logged_in_time']);
+            $user->eraseLoginToken();
         }
         else
         {
@@ -134,7 +135,7 @@ class Auth
                 }
             }
 
-            static::logout();
+            static::logOut();
         }
 
         return false;
