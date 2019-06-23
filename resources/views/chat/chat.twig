@@ -12,10 +12,10 @@
 <body>
     <div id="frame">
         <div id="sidepanel">
-            <div id="profile">
+            <div id="profile" data-id="{{ authUser.getId() }}">
                 <div class="wrap">
                     <img id="profile-img" src="{{ authUser.getPicture(true) }}" class="online" alt="" />
-                    <p>{{ authUser.getFullName() }}</p>
+                    <p class="fullname">{{ authUser.getFullName() }}</p>
                 </div>
             </div>
             <div id="search">
@@ -26,7 +26,7 @@
                 <ul>
                     {% if contacts.isNotEmpty() %}
                         {% for contact in contacts %}
-                            {% set contact = contact.contactA(authUser).first() %}
+                            {% set contact = contact.contact(authUser).first() %}
                             <li class="contact" data-id="{{ contact.getId() }}">
                                 <div class="wrap">
                                     <span class="contact-status {{ contact.chatStatus.isOnline() ? "online" }}"></span>
@@ -38,16 +38,6 @@
                                 </div>
                             </li>
                         {% endfor %}
-                        {# <li class="contact active">
-                            <div class="wrap">
-                                <span class="contact-status busy"></span>
-                                <img src="/img/fa-image.png" alt="" />
-                                <div class="meta">
-                                    <p class="name">Harvey Specter</p>
-                                    <p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-                                </div>
-                            </div>
-                        </li> #}
                     {% else %}
                         <li class="contact no-contacts">
                             <div class="wrap">
@@ -65,8 +55,8 @@
         <div class="content" id="content">
             <div class="contact-profile">
                 <div class="active-contact">
-                    <img src="/img/fa-image.png" alt="" />
-                    <p>Harvey Specter</p>
+                    <img src="" alt="" />
+                    <p></p>
                 </div>
 
                 <div class="menu-icons">
@@ -111,17 +101,8 @@
                     </div>
                 </div>
             </div>
-            <div class="messages">
-                <ul>
-                    <li class="sent">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-                    </li>
-                    <li class="replies">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>When you're backed against the wall, break the god damn thing down.</p>
-                    </li>
-                </ul>
+            <div class="messages" id="messages">
+                <ul></ul>
             </div>
             <div class="message-input">
                 <div class="wrap">

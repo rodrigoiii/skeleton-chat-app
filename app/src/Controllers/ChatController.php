@@ -9,6 +9,7 @@ use App\Models\Message;
 use App\Models\Notification;
 use App\Models\User;
 use App\Transformer\SearchContactResultTransformer;
+use App\Transformers\ConversationTransformer;
 use Core\BaseController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -185,6 +186,28 @@ class ChatController extends BaseController
         return $response->withJson([
             'success' => true,
             'message' => "Cannot send message this time. Please try again later."
+        ]);
+    }
+
+    public function getConversation(Request $request, Response $response, $to_id)
+    {
+        $login_token = $request->getParam('login_token');
+        $authUser = User::findByLoginToken($login_token);
+        $user2 = User::find($to_id);
+
+        $conversation = Message::conversation($authUser, $user2)
+                            ->select(["id", "message", "from_id", "to_id", "created_at"])
+                            ->orderBy('id', "DESC")
+                            ->limit(config('chat.default_conversation_length'))
+                            ->get()
+                            ->sortBy('id');
+
+        $conversation = transformer($conversation, new ConversationTransformer)->toArray();
+
+        return $response->withJson([
+            'success' => true,
+            'message' => "Successfully fetch message.",
+            'conversation' => $conversation['data']
         ]);
     }
 }

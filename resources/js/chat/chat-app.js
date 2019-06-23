@@ -54,6 +54,7 @@ var ChatApp = {
     // chat.connect();
 
     $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
+    $('#contacts .contact').click(ChatApp.activateContact);
     $('#addcontact').click(ChatApp.onAddContact);
     $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(ChatApp.onSearchingContact, 800));
     $('body').on('click', ".add-contact-modal .send-contact-request", ChatApp.onSendContactRequest);
@@ -68,6 +69,8 @@ var ChatApp = {
     $('#input-message').on("keyup", ChatApp.onTyping);
     $('#send-message').click(_.throttle(ChatApp.onSendMessage, 800));
 
+    // activate first contact
+    $('#contacts .contact:first').click();
   },
 
   onFilterContacts: function() {
@@ -84,6 +87,36 @@ var ChatApp = {
           .toLowerCase()
           .search(keyword) === -1;
       }).css('display', "none");
+  },
+
+  activateContact: function() {
+    $('#contacts .contact').removeClass("active");
+    $(this).addClass("active");
+
+    var activeContact = Helper.getActiveContact();
+    var authInfo = Helper.getAuthInfo();
+
+    var activeContactEl = $('#content .active-contact');
+    $("img", activeContactEl).attr('src', activeContact.picture);
+    $("p", activeContactEl).text(activeContact.fullname);
+
+    var tmpl = _.template($('#message-tmpl').html());
+    chatApiObj.getConversation(activeContact.id, function(response) {
+      if (response.success) {
+        var conversation = response.conversation;
+
+        $('#messages ul').html("");
+        _.each(conversation, function(convo) {
+          $('#messages ul').append(tmpl({
+            sent: convo.sender.id == authInfo.id,
+            picture: convo.sender.picture,
+            message: convo.message
+          }));
+        });
+
+        Helper.scrollMessage();
+      }
+    });
   },
 
   onAddContact: function() {
@@ -192,14 +225,15 @@ var ChatApp = {
     var load = function() {
       input_el.val("");
 
-      var tmpl = _.template($('#sent-message-tmpl').html());
+      var tmpl = _.template($('#message-tmpl').html());
       var content_el = $('#content');
 
       chatApiObj.sendMessage(2, message, function(response) {
         if (response.success) {
           $('.messages ul', content_el).append(tmpl({
             picture: chatObj.user.picture,
-            message: message
+            message: message,
+            sent: true
           }));
 
           Helper.scrollMessage();

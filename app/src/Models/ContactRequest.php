@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Notification;
 use Core\BaseModel;
 use Core\Log;
 

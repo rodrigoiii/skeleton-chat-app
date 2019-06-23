@@ -47,6 +47,11 @@ Api.prototype = {
     };
     $.post("/api/send-message/" + to_id, this.csrf.mergeWithToken(params), callback);
   },
+
+  getConversation: function(to_id, callback) {
+    var query_string = "?login_token=" + this.login_token;
+    $.get("/api/conversation/" + to_id + query_string, callback);
+  },
 };
 
 module.exports = Api;

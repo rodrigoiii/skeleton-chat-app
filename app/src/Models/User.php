@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Contact;
-use App\Models\ContactRequest;
-use App\Models\Notification;
 use App\Traits\FullTextSearch;
 use Core\BaseModel;
 
