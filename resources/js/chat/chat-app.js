@@ -29,7 +29,8 @@ require("bootstrap/js/dropdown");
 require("bootstrap/js/button");
 var _ = require("underscore");
 var Chat = require("./classes/Chat");
-var ChatApi = require("./../classes/Chat/Api");
+var Helper = require("./classes/Helper");
+var ChatApi = require("./classes/Api");
 
 /**
  * global object
@@ -37,20 +38,20 @@ var ChatApi = require("./../classes/Chat/Api");
  */
 var ChatApp = {
   init: function() {
-    window.chatApiObj = new ChatApi(chatObj.login_token);
+    window.chatApiObj = new ChatApi(chatObj.user.login_token);
 
     // var eventHandler = new EventHandler({
     //   host: chatObj.config.host,
     //   port: chatObj.config.port,
-    //   login_token: chatObj.login_token
+    //   login_token: chatObj.user.login_token
     // });
     // eventHandler.connect();
     var chat = new Chat({
       host: chatObj.config.host,
       port: chatObj.config.port,
-      login_token: chatObj.login_token
+      login_token: chatObj.user.login_token
     });
-    chat.connect();
+    // chat.connect();
 
     $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
     $('#addcontact').click(ChatApp.onAddContact);
@@ -63,6 +64,10 @@ var ChatApp = {
     $(document).on('click', '#notification-dropdown .dropdown-menu', function (e) {
       e.stopPropagation();
     });
+
+    $('#input-message').on("keyup", ChatApp.onTyping);
+    $('#send-message').click(_.throttle(ChatApp.onSendMessage, 800));
+
   },
 
   onFilterContacts: function() {
@@ -158,6 +163,58 @@ var ChatApp = {
         });
       }
     }
+  },
+
+  onTyping: function(e) {
+    var ENTER_KEYCODE = 13;
+
+    if (e.which == ENTER_KEYCODE) {
+      $('#send-message').click();
+      return false;
+    }
+  },
+
+  onSendMessage: function() {
+    var sendMessageBtnEl = $('#send-message');
+
+    var input_el = $('#input-message');
+    var message = input_el.val().trim();
+
+    var before = function() {
+      if (message !== "") {
+        $('#send-message').prop("disabled", true);
+        $('#send-message').html('<span class="glyphicon glyphicon-refresh rotating"></span>');
+
+        load();
+      }
+    };
+
+    var load = function() {
+      input_el.val("");
+
+      var tmpl = _.template($('#sent-message-tmpl').html());
+      var content_el = $('#content');
+
+      chatApiObj.sendMessage(2, message, function(response) {
+        if (response.success) {
+          $('.messages ul', content_el).append(tmpl({
+            picture: chatObj.user.picture,
+            message: message
+          }));
+
+          Helper.scrollMessage();
+        }
+
+        after();
+      });
+    };
+
+    var after = function() {
+      $('#send-message').prop("disabled", false);
+      $('#send-message').html('<i class="glyphicon glyphicon-send" aria-hidden="true"></i>');
+    };
+
+    before();
   }
 };
 

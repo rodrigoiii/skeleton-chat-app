@@ -62,7 +62,7 @@
                 <a href="{{ path_for('auth.account-settings') }}" style="text-decoration: none;"><i class="glyphicon glyphicon-wrench" aria-hidden="true"></i> <span>Settings</span></a>
             </div>
         </div>
-        <div class="content">
+        <div class="content" id="content">
             <div class="contact-profile">
                 <div class="active-contact">
                     <img src="/img/fa-image.png" alt="" />
@@ -121,36 +121,12 @@
                         <img src="/img/fa-image.png" alt="" />
                         <p>When you're backed against the wall, break the god damn thing down.</p>
                     </li>
-                    <li class="replies">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>Excuses don't win championships.</p>
-                    </li>
-                    <li class="sent">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>Oh yeah, did Michael Jordan tell you that?</p>
-                    </li>
-                    <li class="replies">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>No, I told him that.</p>
-                    </li>
-                    <li class="replies">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>What are your choices when someone puts a gun to your head?</p>
-                    </li>
-                    <li class="sent">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>What are you talking about? You do what they say or they shoot you.</p>
-                    </li>
-                    <li class="replies">
-                        <img src="/img/fa-image.png" alt="" />
-                        <p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-                    </li>
                 </ul>
             </div>
             <div class="message-input">
                 <div class="wrap">
-                    <input type="text" placeholder="Write your message..." />
-                    <button class="submit"><i class="glyphicon glyphicon-send" aria-hidden="true"></i></button>
+                    <input type="text" id="input-message" placeholder="Write your message..." />
+                    <button type="button" id="send-message"><i class="glyphicon glyphicon-send" aria-hidden="true"></i></button>
                 </div>
 
                 <div class="reconnecting-container" style="display: none">Reconnecting ...</div>
@@ -169,7 +145,10 @@
                 host: "{{ config('chat.host') }}",
                 port: "{{ config('chat.port') }}",
             },
-            login_token: "{{ authUser.login_token }}"
+            user: {
+                picture: "{{ authUser.getPicture(true) }}",
+                login_token: "{{ authUser.login_token }}"
+            }
         };
     </script>
     <script type="text/javascript" src="/js/chat/chat-app.js"></script>

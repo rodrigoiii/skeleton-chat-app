@@ -15,14 +15,14 @@ class CreateTableMessages extends AbstractMigration
         $table = $this->table("messages")
             ->addColumn("message", "text", ['limit' => MysqlAdapter::TEXT_TINY])
             ->addColumn("is_read", "boolean", ['default' => 0])
-            ->addColumn("sender_id", "integer")
-            ->addColumn("receiver_id", "integer")
+            ->addColumn("from_id", "integer", ['comment' => "Message sender"])
+            ->addColumn("to_id", "integer", ['comment' => "Message receiver"])
             ->addTimestamps();
 
         $table->create();
 
-        $table->addForeignKey("sender_id", "users", "id")
-            ->addForeignKey("receiver_id", "users", "id")
+        $table->addForeignKey("from_id", "users", "id")
+            ->addForeignKey("to_id", "users", "id")
             ->save();
     }
 
@@ -38,7 +38,7 @@ class CreateTableMessages extends AbstractMigration
         {
             $table = $this->table("messages");
 
-            $table->dropForeignKey(["sender_id", "receiver_id"])
+            $table->dropForeignKey(["from_id", "to_id"])
                 ->drop("messages")
                 ->save();
         }

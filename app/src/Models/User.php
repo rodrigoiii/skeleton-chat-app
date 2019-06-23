@@ -51,6 +51,14 @@ class User extends BaseModel
             ->first();
     }
 
+    public function sendMessage(Message $message)
+    {
+        $message->from_id = $this->id;
+        $is_sent = $message->save();
+
+        return $is_sent ? $message : false;
+    }
+
     public static function findByEmail($email)
     {
         return static::where('email', $email)->first();

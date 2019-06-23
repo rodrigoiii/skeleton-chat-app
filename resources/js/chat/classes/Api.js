@@ -1,13 +1,13 @@
 // require jquery
-var Csrf = require("./../Csrf");
+var Csrf = require("./../../classes/Csrf");
 
-function ChatApi(login_token) {
+function Api(login_token) {
   this.login_token = login_token;
 
   this.csrf = new Csrf();
 }
 
-ChatApi.prototype = {
+Api.prototype = {
   searchContacts: function(keyword, callback) {
     var query_string = "?login_token=" + this.login_token +
                        "&keyword=" + keyword;
@@ -38,7 +38,15 @@ ChatApi.prototype = {
     };
 
     $.post("/api/read-notification", this.csrf.mergeWithToken(params), callback);
-  }
+  },
+
+  sendMessage: function(to_id, message, callback) {
+    var params = {
+      login_token: this.login_token,
+      message: message
+    };
+    $.post("/api/send-message/" + to_id, this.csrf.mergeWithToken(params), callback);
+  },
 };
 
-module.exports = ChatApi;
+module.exports = Api;

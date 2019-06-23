@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Auth\Auth;
 use App\Models\Contact;
 use App\Models\ContactRequest;
+use App\Models\Message;
 use App\Models\Notification;
 use App\Models\User;
 use App\Transformer\SearchContactResultTransformer;
@@ -157,6 +158,33 @@ class ChatController extends BaseController
         return $response->withJson([
             'success' => false,
             'message' => "Unauthorized to access this endpoint"
+        ]);
+    }
+
+    public function sendMessage(Request $request, Response $response, $to_id)
+    {
+        $login_token = $request->getParam('login_token');
+        $authUser = User::findByLoginToken($login_token);
+
+        $message = $request->getParam('message');
+
+        $sentMessage = $authUser->sendMessage(new Message(compact("message", "to_id")));
+
+        if ($sentMessage instanceof Message)
+        {
+            return $response->withJson([
+                'success' => true,
+                'message' => "Successfully send message.",
+                'sent_message' => [
+                    'id' => $sentMessage->id,
+                    'message' => $sentMessage->message
+                ]
+            ]);
+        }
+
+        return $response->withJson([
+            'success' => true,
+            'message' => "Cannot send message this time. Please try again later."
         ]);
     }
 }
