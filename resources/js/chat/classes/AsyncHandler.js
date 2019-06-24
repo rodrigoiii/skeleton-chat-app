@@ -6,54 +6,74 @@ function AsyncHandler() {
   //
 }
 
-AsyncHandler.onConnected = function(data) {
-  var emitter_id = data.emitter_id;
-  var contacts_el = $('#contacts');
+AsyncHandler.prototype = {
+  onConnected: function(data) {
+    var emitter_id = data.emitter_id;
+    var contacts_el = $('#contacts');
 
-  var status_el = $('.contact[data-id="'+emitter_id+'"] .contact-status', contacts_el);
+    var status_el = $('.contact[data-id="'+emitter_id+'"] .contact-status', contacts_el);
 
-  if (!status_el.hasClass("online")) {
-    status_el.addClass("online");
-  }
-};
+    if (!status_el.hasClass("online")) {
+      status_el.addClass("online");
+    }
+  },
 
-AsyncHandler.onDisconnected = function(data) {
-  var emitter_id = data.emitter_id;
-  var contacts_el = $('#contacts');
+  onDisconnected: function(data) {
+    var emitter_id = data.emitter_id;
+    var contacts_el = $('#contacts');
 
-  var status_el = $('.contact[data-id="'+emitter_id+'"] .contact-status', contacts_el);
+    var status_el = $('.contact[data-id="'+emitter_id+'"] .contact-status', contacts_el);
 
-  if (status_el.hasClass("online")) {
-    status_el.removeClass("online");
-  }
-};
+    if (status_el.hasClass("online")) {
+      status_el.removeClass("online");
+    }
+  },
 
-AsyncHandler.onTyping = function(data) {
-  var userTyping = data.from;
-  var activeContact = Helper.getActiveContact();
+  onTyping: function(data) {
+    var userTyping = data.from;
+    var activeContact = Helper.getActiveContact();
 
-  if (activeContact.id == userTyping.id) {
-    var tmpl = _.template($('#message-tmpl').html());
+    if (activeContact.id == userTyping.id) {
+      var tmpl = _.template($('#message-tmpl').html());
 
-    $('#messages ul').append(tmpl({
-      sent: false,
-      picture: userTyping.picture,
-      message: "...",
-      classAdded: "typing-type"
-    }));
-  }
-};
+      $('#messages ul').append(tmpl({
+        sent: false,
+        picture: userTyping.picture,
+        message: "...",
+        classAdded: "typing-type"
+      }));
+    }
+  },
 
-AsyncHandler.onStopTyping = function(data) {
-  var userTyping = data.from;
-  var activeContact = Helper.getActiveContact();
+  onStopTyping: function(data) {
+    var userTyping = data.from;
+    var activeContact = Helper.getActiveContact();
 
-  if (activeContact.id == userTyping.id) {
-    var tmpl = _.template($('#message-tmpl').html());
+    if (activeContact.id == userTyping.id) {
+      var typingTypeEl = $('#messages ul li:last.typing-type');
+      if (typingTypeEl.length > 0) {
+        typingTypeEl.remove();
+      }
+    }
+  },
 
-    var typingTypeEl = $('#messages ul li:last.typing-type');
-    if (typingTypeEl.length > 0) {
-      typingTypeEl.remove();
+  onSendMessage: function(data) {
+    var sender = data.from;
+    var activeContact = Helper.getActiveContact();
+
+    if (activeContact.id == sender.id) {
+      var typingTypeEl = $('#messages ul li:last.typing-type');
+      if (typingTypeEl.length > 0) {
+        typingTypeEl.remove();
+      }
+
+      var tmpl = _.template($('#message-tmpl').html());
+
+      $('#messages ul').append(tmpl({
+        sent: false,
+        picture: sender.picture,
+        message: sender.message
+      }));
     }
   }
 };

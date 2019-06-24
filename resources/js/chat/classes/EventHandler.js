@@ -33,7 +33,7 @@ EventHandler.prototype = {
   },
 
   // Asynchronous handlers
-  asyncHandler: asyncHandler
+  asyncHandler: new asyncHandler()
 };
 
 module.exports = EventHandler;

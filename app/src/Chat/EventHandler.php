@@ -121,4 +121,29 @@ class EventHandler
             $toSocket->send(json_encode($return_data));
         }
     }
+
+    public function onSendMessage(ConnectionInterface $from, $msg)
+    {
+        parse_str($from->httpRequest->getUri()->getQuery(), $params);
+
+        $authUser = User::findByLoginToken($params['login_token']);
+        $to = User::find($msg->to_id);
+
+        // if chatting to is online
+        if (isset($this->clients[$msg->to_id]))
+        {
+            $return_data = [
+                'event' => __FUNCTION__,
+                'from' => [
+                    'id' => $authUser->id,
+                    'picture' => $authUser->picture,
+                    'message' => $msg->message,
+                ],
+                'receiver_token' => $to->login_token
+            ];
+
+            $toSocket = $this->clients[$msg->to_id];
+            $toSocket->send(json_encode($return_data));
+        }
+    }
 }

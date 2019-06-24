@@ -214,8 +214,6 @@ var ChatApp = {
 
       var activeContact = Helper.getActiveContact();
       chat.emitter.typing(activeContact.id);
-
-      console.log("typing");
     }
   },
 
@@ -224,8 +222,6 @@ var ChatApp = {
 
     var activeContact = Helper.getActiveContact();
     chat.emitter.stopTyping(activeContact.id);
-
-    console.log("stop typing");
   },
 
   onSendMessage: function() {
@@ -246,10 +242,12 @@ var ChatApp = {
     var load = function() {
       input_el.val("");
 
+      var activeContact = Helper.getActiveContact();
+
       var tmpl = _.template($('#message-tmpl').html());
       var content_el = $('#content');
 
-      chatApiObj.sendMessage(2, message, function(response) {
+      chatApiObj.sendMessage(activeContact.id, message, function(response) {
         if (response.success) {
           $('.messages ul', content_el).append(tmpl({
             picture: chatObj.user.picture,
@@ -258,6 +256,8 @@ var ChatApp = {
           }));
 
           Helper.scrollMessage();
+
+          chat.emitter.sendMessage(activeContact.id, message);
         }
 
         after();

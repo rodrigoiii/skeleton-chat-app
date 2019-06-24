@@ -6,6 +6,7 @@ Emitter.ON_CONNECTED = "onConnected";
 // Emitter.ON_DISCONNECTED = "onDisconnected"; // exist already in the server side, no need for mapping
 Emitter.ON_TYPING = "onTyping";
 Emitter.ON_STOP_TYPING = "onStopTyping";
+Emitter.ON_SEND_MESSAGE = "onSendMessage";
 
 Emitter.prototype = {
   emit: function(msg, errorCallback) { // interface
@@ -51,6 +52,16 @@ Emitter.prototype = {
 
     this.emit(msg);
   },
+
+  sendMessage: function(to_id, message) {
+    var msg = {
+      event: Emitter.ON_SEND_MESSAGE,
+      to_id: to_id,
+      message: message
+    };
+
+    this.emit(msg);
+  }
 };
 
 module.exports = Emitter;
