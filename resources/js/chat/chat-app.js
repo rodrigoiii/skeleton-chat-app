@@ -48,12 +48,12 @@ var ChatApp = {
     //   login_token: chatObj.user.login_token
     // });
     // eventHandler.connect();
-    window.realTimeChat = new Chat({
+    window.chat = new Chat({
       host: chatObj.config.host,
       port: chatObj.config.port,
       login_token: chatObj.user.login_token
     });
-    realTimeChat.connect();
+    chat.connect();
 
     $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
     $('#contacts .contact').click(ChatApp.activateContact);
@@ -212,12 +212,18 @@ var ChatApp = {
     if (!ChatApp.is_typing) {
       ChatApp.is_typing = true;
 
+      var activeContact = Helper.getActiveContact();
+      chat.emitter.typing(activeContact.id);
+
       console.log("typing");
     }
   },
 
   onStopTyping: function() {
     ChatApp.is_typing = false;
+
+    var activeContact = Helper.getActiveContact();
+    chat.emitter.stopTyping(activeContact.id);
 
     console.log("stop typing");
   },

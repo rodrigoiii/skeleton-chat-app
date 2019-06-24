@@ -1,11 +1,10 @@
+var _ = require("underscore");
+var Helper = require("./Helper");
+
 // Asynchronous handlers
 function AsyncHandler() {
   //
 }
-
-AsyncHandler.ON_CONNECTED = "onConnected";
-// AsyncHandler.ON_DISCONNECTED = "onDisconnected"; // exist already in the server side, no need for mapping
-AsyncHandler.ON_TYPING = "onTyping";
 
 AsyncHandler.onConnected = function(data) {
   var emitter_id = data.emitter_id;
@@ -30,7 +29,33 @@ AsyncHandler.onDisconnected = function(data) {
 };
 
 AsyncHandler.onTyping = function(data) {
+  var userTyping = data.from;
+  var activeContact = Helper.getActiveContact();
 
+  if (activeContact.id == userTyping.id) {
+    var tmpl = _.template($('#message-tmpl').html());
+
+    $('#messages ul').append(tmpl({
+      sent: false,
+      picture: userTyping.picture,
+      message: "...",
+      classAdded: "typing-type"
+    }));
+  }
+};
+
+AsyncHandler.onStopTyping = function(data) {
+  var userTyping = data.from;
+  var activeContact = Helper.getActiveContact();
+
+  if (activeContact.id == userTyping.id) {
+    var tmpl = _.template($('#message-tmpl').html());
+
+    var typingTypeEl = $('#messages ul li:last.typing-type');
+    if (typingTypeEl.length > 0) {
+      typingTypeEl.remove();
+    }
+  }
 };
 
 module.exports = AsyncHandler;

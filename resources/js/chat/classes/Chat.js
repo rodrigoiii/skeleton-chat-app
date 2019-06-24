@@ -1,36 +1,11 @@
 var EventHandler = require("./EventHandler");
+var Emitter = require("./Emitter");
 
 function Chat(config) {
   this.config = config;
 }
 
 Chat.prototype = {
-  emitMessage: function(msg, errorCallback) {
-    switch(this.webSocket.readyState) {
-      case this.webSocket.CONNECTING:
-        console.log("Connecting...");
-        break;
-
-      case this.webSocket.OPEN:
-        this.webSocket.send(JSON.stringify(msg));
-        break;
-
-      case this.webSocket.CLOSING:
-        console.log("Closing...");
-        break;
-
-      case this.webSocket.CLOSED:
-        console.log("Closed!");
-
-        if (typeof(errorCallback) !== "undefined") {
-          errorCallback();
-        } else {
-          console.log("The server is disconnect.");
-        }
-        break;
-    }
-  },
-
   connect: function() {
     var _this = this;
     var eventHandler = new EventHandler();
@@ -38,7 +13,7 @@ Chat.prototype = {
 
     webSocket.onopen = function(e) {
       eventHandler.connected();
-      this.send(JSON.stringify({event: eventHandler.asyncHandler.ON_CONNECTED}));
+      this.send(JSON.stringify({event: Emitter.ON_CONNECTED}));
     };
 
     webSocket.onclose = function(e) {
@@ -69,7 +44,7 @@ Chat.prototype = {
       console.log("Error: Receiver token " + token + " is invalid.");
     };
 
-    this.webSocket = webSocket;
+    this.emitter = new Emitter(webSocket);
   }
 };
 

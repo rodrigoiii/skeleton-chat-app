@@ -79,22 +79,46 @@ class EventHandler
         parse_str($from->httpRequest->getUri()->getQuery(), $params);
 
         $authUser = User::findByLoginToken($params['login_token']);
-        $chattingTo = User::find($msg->chatting_to_id);
+        $to = User::find($msg->to_id);
 
         // if chatting to is online
-        if (isset($this->clients[$msg->chatting_to_id]))
+        if (isset($this->clients[$msg->to_id]))
         {
             $return_data = [
                 'event' => __FUNCTION__,
-                // 'chatting_from' => [
-                //     'id' => $authUser->id,
-                //     'picture' => $authUser->picture
-                // ],
-                'receiver_token' => $receiver->login_token
+                'from' => [
+                    'id' => $authUser->id,
+                    'picture' => $authUser->picture
+                ],
+                'receiver_token' => $to->login_token
             ];
 
-            $chattingToSocket = $this->clients[$msg->chatting_to_id];
-            $chattingToSocket->send(json_encode($return_data));
+            $toSocket = $this->clients[$msg->to_id];
+            $toSocket->send(json_encode($return_data));
+        }
+    }
+
+    public function onStopTyping(ConnectionInterface $from, $msg)
+    {
+        parse_str($from->httpRequest->getUri()->getQuery(), $params);
+
+        $authUser = User::findByLoginToken($params['login_token']);
+        $to = User::find($msg->to_id);
+
+        // if chatting to is online
+        if (isset($this->clients[$msg->to_id]))
+        {
+            $return_data = [
+                'event' => __FUNCTION__,
+                'from' => [
+                    'id' => $authUser->id,
+                    'picture' => $authUser->picture
+                ],
+                'receiver_token' => $to->login_token
+            ];
+
+            $toSocket = $this->clients[$msg->to_id];
+            $toSocket->send(json_encode($return_data));
         }
     }
 }

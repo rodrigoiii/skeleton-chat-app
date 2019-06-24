@@ -42,12 +42,12 @@
 
 <script type="text/template" id="message-tmpl">
     <% if (sent) { %>
-        <li class="sent">
+        <li class="sent <%= typeof classAdded !== 'undefined' ? classAdded : '' %>">
             <img src="<%= picture %>" alt="" />
             <p><%= message %></p>
         </li>
     <% } else { %>
-        <li class="replies">
+        <li class="replies <%= typeof classAdded !== 'undefined' ? classAdded : '' %>">
             <img src="<%= picture %>" alt="" />
             <p><%= message %></p>
         </li>
