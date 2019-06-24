@@ -37,6 +37,8 @@ var ChatApi = require("./classes/Api");
  * - chatObj
  */
 var ChatApp = {
+  is_typing: false,
+
   init: function() {
     window.chatApiObj = new ChatApi(chatObj.user.login_token);
 
@@ -46,12 +48,12 @@ var ChatApp = {
     //   login_token: chatObj.user.login_token
     // });
     // eventHandler.connect();
-    var chat = new Chat({
+    window.realTimeChat = new Chat({
       host: chatObj.config.host,
       port: chatObj.config.port,
       login_token: chatObj.user.login_token
     });
-    // chat.connect();
+    realTimeChat.connect();
 
     $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
     $('#contacts .contact').click(ChatApp.activateContact);
@@ -67,6 +69,7 @@ var ChatApp = {
     });
 
     $('#input-message').on("keyup", ChatApp.onTyping);
+    $('#input-message').on('keyup', _.debounce(ChatApp.onStopTyping, 1500));
     $('#send-message').click(_.throttle(ChatApp.onSendMessage, 800));
 
     // activate first contact
@@ -205,6 +208,18 @@ var ChatApp = {
       $('#send-message').click();
       return false;
     }
+
+    if (!ChatApp.is_typing) {
+      ChatApp.is_typing = true;
+
+      console.log("typing");
+    }
+  },
+
+  onStopTyping: function() {
+    ChatApp.is_typing = false;
+
+    console.log("stop typing");
   },
 
   onSendMessage: function() {

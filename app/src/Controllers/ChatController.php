@@ -8,7 +8,7 @@ use App\Models\ContactRequest;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\User;
-use App\Transformer\SearchContactResultTransformer;
+use App\Transformers\SearchContactResultTransformer;
 use App\Transformers\ConversationTransformer;
 use Core\BaseController;
 use Psr\Http\Message\ResponseInterface as Response;
