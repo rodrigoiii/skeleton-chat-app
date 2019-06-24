@@ -184,7 +184,7 @@ class ChatController extends BaseController
         }
 
         return $response->withJson([
-            'success' => true,
+            'success' => false,
             'message' => "Cannot send message this time. Please try again later."
         ]);
     }
@@ -235,6 +235,29 @@ class ChatController extends BaseController
             'success' => true,
             'message' => "Successfully fetch message.",
             'conversation' => $conversation['data']
+        ]);
+    }
+
+    public function readMessage(Request $request, Response $response, $to_id)
+    {
+        $login_token = $request->getParam("login_token");
+        $authUser = User::findByLoginToken($login_token);
+
+        $user2 = User::find($to_id);
+
+        $markAsRead = $authUser->unreadMessage($user2)->update(['is_read' => Message::IS_READ]);
+
+        if ($markAsRead)
+        {
+            return $response->withJson([
+                'success' => true,
+                'message' => "Successfully mark message as read.",
+            ]);
+        }
+
+        return $response->withJson([
+            'success' => false,
+            'message' => "Cannot mark message as read this time. Please try again later."
         ]);
     }
 }

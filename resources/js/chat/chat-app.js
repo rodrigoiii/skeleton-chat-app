@@ -65,6 +65,8 @@ var ChatApp = {
   },
 
   activateContact: function() {
+    var _this = this;
+
     $('#contacts .contact').removeClass("active");
     $(this).addClass("active");
 
@@ -91,6 +93,18 @@ var ChatApp = {
 
         ChatApp.get_message_batch = 1; // reset message batch
         Helper.scrollMessage();
+
+        // umn - unread message number
+        var umnEl = $('.wrap .meta .name .unread-message-number', $(_this));
+
+        if (parseInt(umnEl.data("number")) > 0) {
+          chatApiObj.readMessage(activeContact.id, function(readMessageResponse) {
+            if (readMessageResponse.success) {
+              umnEl.data("number", 0);
+              umnEl.text("");
+            }
+          });
+        }
       }
     });
   },

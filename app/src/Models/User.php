@@ -73,13 +73,11 @@ class User extends BaseModel
         return $this->save();
     }
 
-    public function numerOfUnreadMessage(User $from)
+    public function unreadMessage(User $from)
     {
         return $this->to_messages()
                     ->isRead(false)
-                    ->where("from_id", $from->getId())
-                    ->get()
-                    ->count();
+                    ->where("from_id", $from->getId());
     }
 
     public static function findByEmail($email)

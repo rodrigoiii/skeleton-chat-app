@@ -21,7 +21,7 @@ var Helper = {
       el: el,
       id: el.data("id"),
       picture: $(".wrap img", el).attr("src"),
-      fullname: $(".wrap .meta .name", el).text()
+      fullname: $(".wrap .meta .name .fullname", el).text()
     };
   },
 

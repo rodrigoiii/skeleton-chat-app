@@ -58,6 +58,13 @@ Api.prototype = {
                        "&batch=" + batch;
     $.get("/api/get-messages-by-batch/" + to_id + query_string, callback);
   },
+
+  readMessage: function(to_id, callback) {
+    var params = {
+      login_token: this.login_token
+    };
+    $.post("/api/read-message/" + to_id, this.csrf.mergeWithToken(params), callback);
+  }
 };
 
 module.exports = Api;

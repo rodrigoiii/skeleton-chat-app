@@ -138,7 +138,7 @@ class EventHandler
                     'id' => $authUser->id,
                     'picture' => $authUser->picture,
                     'message' => $msg->message,
-                    'unread_message_number' => $to->numerOfUnreadMessage($authUser)
+                    'unread_message_number' => $to->unreadMessage($authUser)->get()->count()
                 ],
                 'receiver_token' => $to->login_token
             ];

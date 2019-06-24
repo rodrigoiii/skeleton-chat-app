@@ -8,6 +8,8 @@ class Message extends BaseModel
 {
     protected $fillable = ["message", "is_read", "from_id", "to_id"];
 
+    const IS_READ = 1;
+
     /**
      * Sender of message
      * @return Illuminate\Database\Eloquent\Builder
