@@ -38,6 +38,7 @@ var ChatApi = require("./classes/Api");
  */
 var ChatApp = {
   is_typing: false,
+  get_message_batch: 1,
 
   init: function() {
     window.chatApiObj = new ChatApi(chatObj.user.login_token);
@@ -71,6 +72,8 @@ var ChatApp = {
     $('#input-message').on("keyup", ChatApp.onTyping);
     $('#input-message').on('keyup', _.debounce(ChatApp.onStopTyping, 1500));
     $('#send-message').click(_.throttle(ChatApp.onSendMessage, 800));
+
+    $('#messages').scroll(ChatApp.onLoadMoreMessages);
 
     // activate first contact
     $('#contacts .contact:first').click();
@@ -117,6 +120,7 @@ var ChatApp = {
           }));
         });
 
+        ChatApp.get_message_batch = 1; // reset message batch
         Helper.scrollMessage();
       }
     });
@@ -270,6 +274,49 @@ var ChatApp = {
     };
 
     before();
+  },
+
+  onLoadMoreMessages: function() {
+    var _this = this;
+
+    if ($(this).scrollTop() === 0) {
+      if (Helper.canLoadMoreMessage()) {
+        var authInfo = Helper.getAuthInfo();
+        var activeContact = Helper.getActiveContact();
+
+        $('ul', $(this)).prepend('<li class="load-more text-center">Loading...</li>');
+
+        chatApiObj.getMessagesByBatch(activeContact.id, ChatApp.get_message_batch, function(response) {
+          if (response.success) {
+            var conversation = response.conversation;
+            var tmpl = _.template($('#message-tmpl').html());
+            var str = "";
+
+            // delete load more message
+            $("ul li:first-child.load-more", $(_this)).remove();
+
+            // prepend conversation
+            _.each(conversation, function(convo) {
+              str += tmpl({
+                sent: authInfo.id == convo.sender.id,
+                picture: convo.sender.picture,
+                message: convo.message
+              });
+            });
+            $("ul", $(_this)).prepend(str);
+
+            // add no more message if no conversation remaining
+            if (conversation.length === 0) {
+              $("ul", $(_this)).prepend('<li class="no-more text-center">No more message.</li>');
+            } else {
+              Helper.scrollMessage(5);
+            }
+
+            ChatApp.get_message_batch++;
+          }
+        });
+      }
+    }
   }
 };
 

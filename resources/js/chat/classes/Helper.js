@@ -23,6 +23,11 @@ var Helper = {
       picture: $(".wrap img", el).attr("src"),
       fullname: $(".wrap .meta .name", el).text()
     };
+  },
+
+  canLoadMoreMessage: function () {
+    var firstMessageEl = $('#messages ul li:first-child');
+    return !firstMessageEl.hasClass("no-more") && !firstMessageEl.hasClass("load-more");
   }
 };
 

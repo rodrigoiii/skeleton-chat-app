@@ -52,6 +52,12 @@ Api.prototype = {
     var query_string = "?login_token=" + this.login_token;
     $.get("/api/conversation/" + to_id + query_string, callback);
   },
+
+  getMessagesByBatch: function(to_id, batch, callback) {
+    var query_string = "?login_token=" + this.login_token +
+                       "&batch=" + batch;
+    $.get("/api/get-messages-by-batch/" + to_id + query_string, callback);
+  },
 };
 
 module.exports = Api;

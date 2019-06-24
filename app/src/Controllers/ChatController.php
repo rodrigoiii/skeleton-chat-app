@@ -35,12 +35,12 @@ class ChatController extends BaseController
 
     public function searchContacts(Request $request, Response $response)
     {
-        $login_token = $request->getParam('login_token');
+        $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
         if (!is_null($authUser))
         {
-            $keyword = $request->getParam('keyword');
+            $keyword = $request->getParam("keyword");
 
             // $contact_ids = $authUser->contacts()->pluck('user_id')->toArray();
             // $contact_requests_ids = $authUser->contact_requests()->pluck('to_id')->toArray();
@@ -68,12 +68,12 @@ class ChatController extends BaseController
 
     public function sendContactRequest(Request $request, Response $response)
     {
-        $login_token = $request->getParam('login_token');
+        $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
         if (!is_null($authUser))
         {
-            $to_id = $request->getParam('to_id');
+            $to_id = $request->getParam("to_id");
 
             if (!is_null($to_id))
             {
@@ -100,12 +100,12 @@ class ChatController extends BaseController
 
     public function acceptRequest(Request $request, Response $response)
     {
-        $login_token = $request->getParam('login_token');
+        $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
         if (!is_null($authUser))
         {
-            $from_id = $request->getParam('from_id');
+            $from_id = $request->getParam("from_id");
 
             if (!is_null($from_id))
             {
@@ -137,7 +137,7 @@ class ChatController extends BaseController
 
     public function readNotification(Request $request, Response $response)
     {
-        $login_token = $request->getParam('login_token');
+        $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
         if (!is_null($authUser))
@@ -164,10 +164,10 @@ class ChatController extends BaseController
 
     public function sendMessage(Request $request, Response $response, $to_id)
     {
-        $login_token = $request->getParam('login_token');
+        $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
-        $message = $request->getParam('message');
+        $message = $request->getParam("message");
 
         $sentMessage = $authUser->sendMessage(new Message(compact("message", "to_id")));
 
@@ -191,7 +191,7 @@ class ChatController extends BaseController
 
     public function getConversation(Request $request, Response $response, $to_id)
     {
-        $login_token = $request->getParam('login_token');
+        $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
         $user2 = User::find($to_id);
 
@@ -199,6 +199,33 @@ class ChatController extends BaseController
                             ->select(["id", "message", "from_id", "to_id", "created_at"])
                             ->orderBy('id', "DESC")
                             ->limit(config('chat.default_conversation_length'))
+                            ->get()
+                            ->sortBy('id');
+
+        $conversation = transformer($conversation, new ConversationTransformer)->toArray();
+
+        return $response->withJson([
+            'success' => true,
+            'message' => "Successfully fetch message.",
+            'conversation' => $conversation['data']
+        ]);
+    }
+
+    public function getMessagesByBatch(Request $request, Response $response, $to_id)
+    {
+        $login_token = $request->getParam("login_token");
+        $authUser = User::findByLoginToken($login_token);
+        $user2 = User::find($to_id);
+
+        $batch = $request->getParam("batch");
+
+        $default_convo_length = config('chat.default_conversation_length');
+
+        $conversation = Message::conversation($authUser, $user2)
+                            ->select(["id", "message", "from_id", "to_id", "created_at"])
+                            ->orderBy('id', "DESC")
+                            ->offset($default_convo_length * $batch)
+                            ->limit($default_convo_length)
                             ->get()
                             ->sortBy('id');
 

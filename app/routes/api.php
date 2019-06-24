@@ -7,4 +7,5 @@ $this->group("/", function() {
     $this->post("read-notification", ["ChatController", "readNotification"]);
     $this->post("send-message/{to_id}", ["ChatController", "sendMessage"])->add("ValidContactMiddleware");
     $this->get("conversation/{to_id}", ["ChatController", "getConversation"])->add("ValidContactMiddleware");
+    $this->get("get-messages-by-batch/{to_id}", ["ChatController", "getMessagesByBatch"])->add("ValidContactMiddleware");
 }); // use Xhr middleware after the development
