@@ -94,6 +94,9 @@ var ChatApp = {
         ChatApp.get_message_batch = 1; // reset message batch
         Helper.scrollMessage();
 
+        // clear input message
+        $('#input-message').val("");
+
         // umn - unread message number
         var umnEl = $('.wrap .meta .name .unread-message-number', $(_this));
 
