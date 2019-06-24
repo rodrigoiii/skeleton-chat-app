@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Message;
 use App\Traits\FullTextSearch;
 use Core\BaseModel;
 
@@ -18,6 +19,16 @@ class User extends BaseModel
     public function chatStatus()
     {
         return $this->hasOne(ChatStatus::class);
+    }
+
+    public function from_messages()
+    {
+        return $this->hasMany(Message::class, "from_id");
+    }
+
+    public function to_messages()
+    {
+        return $this->hasMany(Message::class, "to_id");
     }
 
     public function setLoginToken($login_token)
@@ -60,6 +71,15 @@ class User extends BaseModel
     {
         $this->login_token = null;
         return $this->save();
+    }
+
+    public function numerOfUnreadMessage(User $from)
+    {
+        return $this->to_messages()
+                    ->isRead(false)
+                    ->where("from_id", $from->getId())
+                    ->get()
+                    ->count();
     }
 
     public static function findByEmail($email)

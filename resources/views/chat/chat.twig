@@ -27,12 +27,18 @@
                     {% if contacts.isNotEmpty() %}
                         {% for contact in contacts %}
                             {% set contact = contact.contact(authUser).first() %}
+                            {% set unread_message_number = authUser.numerOfUnreadMessage(contact) %}
                             <li class="contact" data-id="{{ contact.getId() }}">
                                 <div class="wrap">
                                     <span class="contact-status {{ contact.chatStatus.isOnline() ? "online" }}"></span>
                                     <img src="{{ contact.getPicture(true) }}" alt="" />
                                     <div class="meta">
-                                        <p class="name">{{ contact.getFullName() }}</p>
+                                        <p class="name">
+                                            {{ contact.getFullName() }}
+                                            <b class="unread-message-number">
+                                                {% if unread_message_number > 0 %}({{ unread_message_number }}){% endif %}
+                                            </b>
+                                        </p>
                                         <p class="preview">Todo: preview message</p>
                                     </div>
                                 </div>

@@ -75,6 +75,9 @@ AsyncHandler.prototype = {
         message: sender.message
       }));
     }
+
+    // update unread message
+    $('.wrap .meta .name .unread-message-number', Helper.getContactElById(sender.id)).text("(" + sender.unread_message_number + ")");
   }
 };
 

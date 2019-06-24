@@ -1,28 +1,3 @@
-// $(document).ready(function($) {
-//   $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-
-//   function newMessage() {
-//       message = $(".message-input input").val();
-//       if($.trim(message) == '') {
-//           return false;
-//       }
-//       $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-//       $('.message-input input').val(null);
-//       $('.contact.active .preview').html('<span>You: </span>' + message);
-//       $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-//   }
-
-//   $('.submit').click(function() {
-//     newMessage();
-//   });
-
-//   $(window).on('keydown', function(e) {
-//     if (e.which == 13) {
-//       newMessage();
-//       return false;
-//     }
-//   });
-// });
 require("bootstrap/js/transition");
 require("bootstrap/js/modal");
 require("bootstrap/js/dropdown");
@@ -43,12 +18,6 @@ var ChatApp = {
   init: function() {
     window.chatApiObj = new ChatApi(chatObj.user.login_token);
 
-    // var eventHandler = new EventHandler({
-    //   host: chatObj.config.host,
-    //   port: chatObj.config.port,
-    //   login_token: chatObj.user.login_token
-    // });
-    // eventHandler.connect();
     window.chat = new Chat({
       host: chatObj.config.host,
       port: chatObj.config.port,

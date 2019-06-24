@@ -25,6 +25,10 @@ var Helper = {
     };
   },
 
+  getContactElById: function(id) {
+    return $('#contacts .contact[data-id="'+id+'"]');
+  },
+
   canLoadMoreMessage: function () {
     var firstMessageEl = $('#messages ul li:first-child');
     return !firstMessageEl.hasClass("no-more") && !firstMessageEl.hasClass("load-more");

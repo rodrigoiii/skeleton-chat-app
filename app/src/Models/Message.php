@@ -26,6 +26,11 @@ class Message extends BaseModel
         return $this->belongsTo(User::class, "to_id");
     }
 
+    public function scopeIsRead($query, $is_read=true)
+    {
+        return $query->where("is_read", $is_read);
+    }
+
     public static function conversation(User $from, User $to)
     {
         return static::where(function($query) use($from, $to) {
