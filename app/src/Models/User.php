@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Contact;
+use App\Models\ContactRequest;
 use App\Models\Message;
 use App\Traits\FullTextSearch;
 use Core\BaseModel;
@@ -31,6 +33,32 @@ class User extends BaseModel
         return $this->hasMany(Message::class, "to_id");
     }
 
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
+
+    public function contact_requests()
+    {
+        return $this->hasMany(ContactRequest::class, "from_id");
+    }
+
+    public function isFriend(User $user)
+    {
+        $friend = $this->contacts()->where("contact_id", $user->getId())->first();
+        return !is_null($friend);
+    }
+
+    public function hasPendingRequestTo(User $user)
+    {
+        $request = $this->contact_requests()
+                    ->where("to_id", $user->getId())
+                    ->accepted(false)
+                    ->first();
+
+        return !is_null($request);
+    }
+
     public function setLoginToken($login_token)
     {
         $this->login_token = $login_token;
@@ -55,8 +83,7 @@ class User extends BaseModel
     public function requestTo(User $user)
     {
         return ContactRequest::where('from_id', $this->id)
-            ->where('to_id', $user->getId())
-            ->first();
+            ->where('to_id', $user->getId());
     }
 
     public function sendMessage(Message $message)
@@ -87,6 +114,9 @@ class User extends BaseModel
 
     public static function findByLoginToken($login_token)
     {
-        return static::where('login_token', $login_token)->first();
+        if (!is_null($login_token))
+        {
+            return static::where('login_token', $login_token)->first();
+        }
     }
 }

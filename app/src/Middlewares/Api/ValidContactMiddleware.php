@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Middlewares\Api;
 
 use App\Models\Contact;
 use App\Models\User;
@@ -21,9 +21,6 @@ class ValidContactMiddleware extends BaseMiddleware
      */
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        $login_token = $request->getParam("login_token");
-        $authUser = User::findByLoginToken($login_token);
-
         $URIs = explode("/", trim($request->getUri()->getPath(), "/"));
         if ($URIs[0] === "api") // shift the api value if it is exist
         {
@@ -32,16 +29,16 @@ class ValidContactMiddleware extends BaseMiddleware
 
         $to_id = $URIs[1];
 
-        if (!is_null($authUser))
-        {
-            $user2 = User::find($to_id);
+        $user2 = User::find($to_id);
 
-            if (!is_null($user2))
+        if (!is_null($user2))
+        {
+            $login_token = $request->getParam("login_token");
+            $authUser = User::findByLoginToken($login_token);
+
+            if (Contact::isContact($authUser, $user2))
             {
-                if (Contact::isContact($authUser, $user2))
-                {
-                    return $next($request, $response);
-                }
+                return $next($request, $response);
             }
         }
 

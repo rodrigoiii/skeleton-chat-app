@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Core\BaseModel;
 use Core\Log;
 
@@ -120,20 +121,20 @@ class Notification extends BaseModel
                     ->orWhere("to_id", $user->getId());
     }
 
-    public static function createSendRequest($from_id, $to_id)
+    public static function createSendRequest(User $from, $to)
     {
         return static::create([
-            'from_id' => $from_id,
-            'to_id' => $to_id,
+            'from_id' => $from->getId(),
+            'to_id' => $to->getId(),
             'type' => static::SEND_REQUEST,
         ]);
     }
 
-    public static function changeToAcceptRequest($from_id, $to_id, $markAsUnread=true)
+    public static function changeToAcceptRequest(User $from, $to, $markAsUnread=true)
     {
         $notif = static::sendRequestType()
-                    ->where("from_id", $from_id)
-                    ->where("to_id", $to_id)
+                    ->where("from_id", $from->getId())
+                    ->where("to_id", $to->getId())
                     ->first();
 
         if (!is_null($notif))

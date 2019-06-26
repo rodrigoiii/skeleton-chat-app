@@ -8,9 +8,10 @@ use App\Models\ContactRequest;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\User;
-use App\Transformers\SearchContactResultTransformer;
 use App\Transformers\ConversationTransformer;
+use App\Transformers\SearchContactResultTransformer;
 use Core\BaseController;
+use Core\Log;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -38,31 +39,17 @@ class ChatController extends BaseController
         $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
-        if (!is_null($authUser))
-        {
-            $keyword = $request->getParam("keyword");
+        $keyword = $request->getParam("keyword");
 
-            // $contact_ids = $authUser->contacts()->pluck('user_id')->toArray();
-            // $contact_requests_ids = $authUser->contact_requests()->pluck('to_id')->toArray();
+        $result = User::search($keyword)
+                    ->where("id", "<>", $authUser->getId()) // exclude self in result
+                    ->get();
 
-            // unsearchable ids
-            // $ignore_user_ids = array_flatten([$contact_ids, $contact_requests_ids, $authUser->id]);
-
-            $result = User::search($keyword)
-                        ->whereNotIn('id', [$authUser->getId()])
-                        ->get();
-
-            $users = transformer($result, new SearchContactResultTransformer($authUser))->toArray();
-
-            return $response->withJson([
-                'success' => true,
-                'users' => $users['data']
-            ]);
-        }
+        $users = transformer($result, new SearchContactResultTransformer($authUser))->toArray();
 
         return $response->withJson([
-            'success' => false,
-            'message' => "Unauthorized to access this endpoint"
+            'success' => true,
+            'users' => $users['data']
         ]);
     }
 
@@ -71,24 +58,36 @@ class ChatController extends BaseController
         $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
-        if (!is_null($authUser))
+        $to_id = $request->getParam("to_id");
+        $user2 = User::find($to_id);
+
+        if (!is_null($user2))
         {
-            $to_id = $request->getParam("to_id");
-
-            if (!is_null($to_id))
+            if (!ContactRequest::hasRequest($authUser, $user2))
             {
-                $is_sent = ContactRequest::send($authUser->id, $to_id);
+                if (!Contact::isContact($authUser, $user2))
+                {
+                    $is_sent = ContactRequest::send($authUser, $user2);
 
-                return $response->withJson($is_sent ?
-                    [
-                        'success' => true,
-                        'message' => "Successfully send request."
-                    ] :
-                    [
-                        'success' => false,
-                        'message' => "Cannot send request this time. Please try again later."
-                    ]
-                );
+                    return $response->withJson($is_sent ?
+                        [
+                            'success' => true,
+                            'message' => "Successfully send request."
+                        ] :
+                        [
+                            'success' => false,
+                            'message' => "Cannot send request this time. Please try again later."
+                        ]
+                    );
+                }
+                else
+                {
+                    Log::error("Warning: " . $user2->getFullName() . " is already contact of " . $authUser->getFullName());
+                }
+            }
+            else
+            {
+                Log::error("Warning: " . $authUser->getFullName() . " has already request to " . $user2->getFullName());
             }
         }
 
@@ -103,30 +102,27 @@ class ChatController extends BaseController
         $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
-        if (!is_null($authUser))
+        $from_id = $request->getParam("from_id");
+
+        if (!is_null($from_id))
         {
-            $from_id = $request->getParam("from_id");
+            $is_accepted = ContactRequest::accept($from_id, $authUser->id);
+            $notif = Notification::acceptRequestType()
+                        ->where("from_id", $from_id)
+                        ->where("to_id", $authUser->id)
+                        ->first();
 
-            if (!is_null($from_id))
-            {
-                $is_accepted = ContactRequest::accept($from_id, $authUser->id);
-                $notif = Notification::acceptRequestType()
-                            ->where("from_id", $from_id)
-                            ->where("to_id", $authUser->id)
-                            ->first();
-
-                return $response->withJson($is_accepted ?
-                    [
-                        'success' => true,
-                        'message' => "Successfully accept request.",
-                        'notif_message' => $notif->getMessage($authUser)
-                    ] :
-                    [
-                        'success' => false,
-                        'message' => "Cannot accept request this time. Please try again later."
-                    ]
-                );
-            }
+            return $response->withJson($is_accepted ?
+                [
+                    'success' => true,
+                    'message' => "Successfully accept request.",
+                    'notif_message' => $notif->getMessage($authUser)
+                ] :
+                [
+                    'success' => false,
+                    'message' => "Cannot accept request this time. Please try again later."
+                ]
+            );
         }
 
         return $response->withJson([
@@ -140,26 +136,18 @@ class ChatController extends BaseController
         $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
 
-        if (!is_null($authUser))
-        {
-            $changed = Notification::markAsRead($authUser);
+        $changed = Notification::markAsRead($authUser);
 
-            return $response->withJson($changed ?
-                [
-                    'success' => true,
-                    'message' => "Successfully mark notification as read."
-                ] :
-                [
-                    'success' => false,
-                    'message' => "Cannot mark notification as read this time. Please try again later."
-                ]
-            );
-        }
-
-        return $response->withJson([
-            'success' => false,
-            'message' => "Unauthorized to access this endpoint"
-        ]);
+        return $response->withJson($changed ?
+            [
+                'success' => true,
+                'message' => "Successfully mark notification as read."
+            ] :
+            [
+                'success' => false,
+                'message' => "Cannot mark notification as read this time. Please try again later."
+            ]
+        );
     }
 
     public function sendMessage(Request $request, Response $response, $to_id)

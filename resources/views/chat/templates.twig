@@ -21,7 +21,9 @@
                     <p class="contact-fullname"><%= user.full_name %></p>
                 </td>
                 <td>
-                    <% if (user.has_pending_request) { %>
+                    <% if (user.is_friend) { %>
+                        <span class="label label-success">Friend</span>
+                    <% } else if (user.has_pending_request) {  %>
                         <span class="label label-warning">Pending</span>
                     <% } else {  %>
                         <button class="btn btn-primary btn-xs send-contact-request" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>' data-user-id="<%= user.id %>">

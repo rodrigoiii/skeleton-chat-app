@@ -14,19 +14,33 @@ class ContactRequest extends BaseModel
         return $query->where("is_accepted", $accepted);
     }
 
-    public static function send($from_id, $to_id, $notif=true)
+    public static function hasRequest(User $user, User $user2, $accepted=false)
+    {
+        return static::where(function($query) use($user, $user2) {
+            return $query->where("from_id", $user->getId())
+                        ->where("to_id", $user2->getId());
+        })->orWhere(function($query) use($user, $user2) {
+            return $query->where("from_id", $user2->getId())
+                        ->where("to_id", $user->getId());
+        })
+        ->accepted($accepted)
+        ->get()
+        ->isNotEmpty();
+    }
+
+    public static function send($from, $to, $notif=true)
     {
         // send contact request
         $result = static::create([
-            'from_id' => $from_id,
-            'to_id' => $to_id
+            'from_id' => $from->getId(),
+            'to_id' => $to->getId()
         ]);
 
         if ($result instanceof static)
         {
             if ($notif)
             {
-                $notif = Notification::createSendRequest($from_id, $to_id);
+                $notif = Notification::createSendRequest($from, $to);
 
                 return $notif instanceof Notification;
             }
@@ -38,11 +52,11 @@ class ContactRequest extends BaseModel
         return false;
     }
 
-    public static function accept($from_id, $to_id, $notif=true)
+    public static function accept($from, $to, $notif=true)
     {
         $contactRequest = static::accepted(false)
-                            ->where("from_id", $from_id)
-                            ->where("to_id", $to_id)
+                            ->where("from_id", $from->getId())
+                            ->where("to_id", $to->getId())
                             ->first();
 
         if (!is_null($contactRequest))
@@ -51,8 +65,8 @@ class ContactRequest extends BaseModel
             $is_accepted = $contactRequest->save();
 
             $contact = Contact::create([
-                'contact_id' => $to_id,
-                'user_id' => $from_id
+                'contact_id' => $to->getId(),
+                'user_id' => $from->getId()
             ]);
             $is_saved = $contact instanceof Contact;
 
@@ -60,7 +74,7 @@ class ContactRequest extends BaseModel
             {
                 if ($notif)
                 {
-                    return Notification::changeToAcceptRequest($from_id, $to_id);
+                    return Notification::changeToAcceptRequest($from, $to);
                 }
 
                 return true;

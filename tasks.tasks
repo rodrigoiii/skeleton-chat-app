@@ -12,5 +12,6 @@ Tasks:
    ✔ Typing message - show indicate sender is typing @done (19-06-25 13:36)
    ☐ Add contact - add request notification
    ☐ Accept request - add accept notification
+   ☐ Read message - Show that user seen the message
    ✔ On user connect - mark chat status as connected @done (19-06-25 13:41)
    ✔ On user disconnect - mark chat status as disconnected @done (19-06-25 13:41)
