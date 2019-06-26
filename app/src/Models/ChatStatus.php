@@ -35,4 +35,12 @@ class ChatStatus extends BaseModel
             'user_id' => $user->getId()
         ]);
     }
+
+    public static function createOfflineUser(User $user)
+    {
+        return static::create([
+            'status' => static::OFFLINE,
+            'user_id' => $user->getId()
+        ]);
+    }
 }

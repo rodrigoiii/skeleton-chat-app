@@ -73,14 +73,16 @@
                             <i class="glyphicon glyphicon-bell"></i>
 
                             {% if notif_num > 0 %}
-                                <span class="badge">{{ notif_num }}</span>
+                                <span class="badge notif-number">{{ notif_num }}</span>
                             {% endif %}
                         </a>
 
                         <ul class="dropdown-menu dropdown-cart dropdown-menu-right" id="notification-menu">
                             {% if notifications.get().isNotEmpty() %}
                                 {% for notif in notifications.get() %}
-                                    <li>
+                                    {% set is_send_request = notif.isSendRequest(authUser) %}
+
+                                    <li data-from-id="{{ notif.getUser().id }}" data-type="{{ is_send_request ? 'send-request' : 'accept-request' }}">
                                         <span class="item">
                                             <span class="item-left">
                                                 <img src="{{ notif.getUser().getPicture(true) }}" alt="" />
@@ -89,7 +91,7 @@
                                                 </span>
                                             </span>
                                             <span class="item-right">
-                                                {% if notif.isSendRequest(authUser) %}
+                                                {% if is_send_request %}
                                                     <button class="btn btn-info btn-xs accept-request pull-right" data-from-id="{{ notif.from_id }}" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
                                                 {% endif %}
                                             </span>
@@ -97,7 +99,7 @@
                                     </li>
                                 {% endfor %}
                             {% else %}
-                                <li>
+                                <li class="empty">
                                     <span class="item">
                                         <span class="item-left">
                                             <p>Notification is empty</p>

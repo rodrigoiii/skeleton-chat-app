@@ -7,11 +7,18 @@ use Core\Log;
 
 class ContactRequest extends BaseModel
 {
+    const ACCEPTED = 1;
+
     protected $fillable = ["from_id", "to_id", "is_accepted"];
 
     public function scopeAccepted($query, $accepted=true)
     {
         return $query->where("is_accepted", $accepted);
+    }
+
+    public static function areFriends(User $user, User $user2)
+    {
+        return static::hasRequest($user, $user2, static::ACCEPTED);
     }
 
     public static function hasRequest(User $user, User $user2, $accepted=false)

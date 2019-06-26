@@ -42,6 +42,24 @@
     <% } %>
 </script>
 
+<script type="text/template" id="notification-tmpl">
+    <li data-from-id="<%= from_id %>" data-type="<%= type %>">
+        <span class="item">
+            <span class="item-left">
+                <img src="<%= picture %>" alt="" />
+                <span class="item-info">
+                    <p><%= notif_message %></p>
+                </span>
+            </span>
+            <span class="item-right">
+                <% if (type == "send-request") { %>
+                    <button class="btn btn-info btn-xs accept-request pull-right" data-from-id="<%= from_id %>" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
+                <% } %>
+            </span>
+        </span>
+    </li>
+</script>
+
 <script type="text/template" id="message-tmpl">
     <% if (sent) { %>
         <li class="sent <%= typeof classAdded !== 'undefined' ? classAdded : '' %>">

@@ -26,7 +26,8 @@ Api.prototype = {
   acceptRequest: function(from_id, callback) {
     var params = {
       from_id: from_id,
-      login_token: this.login_token
+      login_token: this.login_token,
+      _METHOD: "PUT"
     };
 
     $.post("/api/accept-request", this.csrf.mergeWithToken(params), callback);
@@ -34,7 +35,8 @@ Api.prototype = {
 
   readNotification: function(callback) {
     var params = {
-      login_token: this.login_token
+      login_token: this.login_token,
+      _METHOD: "PUT"
     };
 
     $.post("/api/read-notification", this.csrf.mergeWithToken(params), callback);
@@ -61,7 +63,8 @@ Api.prototype = {
 
   readMessage: function(to_id, callback) {
     var params = {
-      login_token: this.login_token
+      login_token: this.login_token,
+      _METHOD: "PUT"
     };
     $.post("/api/read-message/" + to_id, this.csrf.mergeWithToken(params), callback);
   }

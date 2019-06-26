@@ -2,7 +2,7 @@
 
 namespace App\Middlewares\Api;
 
-use App\Models\Contact;
+use App\Models\ContactRequest;
 use App\Models\User;
 use Core\BaseMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -36,7 +36,7 @@ class ValidContactMiddleware extends BaseMiddleware
             $login_token = $request->getParam("login_token");
             $authUser = User::findByLoginToken($login_token);
 
-            if (Contact::isContact($authUser, $user2))
+            if (ContactRequest::areFriends($authUser, $user2))
             {
                 return $next($request, $response);
             }

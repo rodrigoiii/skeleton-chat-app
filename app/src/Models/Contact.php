@@ -22,19 +22,6 @@ class Contact extends BaseModel
         }
     }
 
-    public static function isContact(User $user1, User $user2)
-    {
-        $result = static::where(function($query) use($user1, $user2) {
-                    return $query->where('contact_id', $user1->getId())
-                                ->where('user_id', $user2->getId());
-                    })->orWhere(function($query) use($user1, $user2) {
-                        return $query->where('contact_id', $user2->getId())
-                                    ->where('user_id', $user1->getId());
-                    })->first();
-
-        return !is_null($result);
-    }
-
     public static function contacts(User $user)
     {
         return static::where('contact_id', $user->getId())

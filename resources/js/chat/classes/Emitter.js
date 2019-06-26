@@ -4,6 +4,8 @@ function Emitter(webSocket) {
 
 Emitter.ON_CONNECTED = "onConnected";
 // Emitter.ON_DISCONNECTED = "onDisconnected"; // exist already in the server side, no need for mapping
+Emitter.ON_SEND_REQUEST = "onSendRequest";
+Emitter.ON_ACCEPT_REQUEST = "onAcceptRequest";
 Emitter.ON_TYPING = "onTyping";
 Emitter.ON_STOP_TYPING = "onStopTyping";
 Emitter.ON_SEND_MESSAGE = "onSendMessage";
@@ -33,6 +35,24 @@ Emitter.prototype = {
         }
         break;
     }
+  },
+
+  sendRequest: function(to_id) {
+    var msg = {
+      event: Emitter.ON_SEND_REQUEST,
+      to_id: to_id
+    };
+
+    this.emit(msg);
+  },
+
+  acceptRequest: function(from_id) {
+    var msg = {
+      event: Emitter.ON_ACCEPT_REQUEST,
+      from_id: from_id
+    };
+
+    this.emit(msg);
   },
 
   typing: function(to_id) {

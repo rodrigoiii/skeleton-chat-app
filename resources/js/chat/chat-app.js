@@ -15,15 +15,19 @@ var ChatApp = {
   is_typing: false,
   get_message_batch: 1,
 
+  chat: null,
+
   init: function() {
     window.chatApiObj = new ChatApi(chatObj.user.login_token);
 
-    window.chat = new Chat({
+    ChatApp.chat = new Chat({
       host: chatObj.config.host,
       port: chatObj.config.port,
       login_token: chatObj.user.login_token
     });
-    chat.connect();
+    ChatApp.chat.connect();
+
+    window.chat = ChatApp.chat; // remove this after development
 
     $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
     $('#contacts .contact').click(ChatApp.activateContact);
@@ -31,7 +35,7 @@ var ChatApp = {
     $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(ChatApp.onSearchingContact, 800));
     $('body').on('click', ".add-contact-modal .send-contact-request", ChatApp.onSendContactRequest);
 
-    $('#notification-menu .accept-request').click(ChatApp.onAcceptRequest);
+    $('#notification-menu').on("click", ".accept-request", ChatApp.onAcceptRequest);
 
     $("#notification-dropdown").on("shown.bs.dropdown", ChatApp.onReadNotification);
     $(document).on('click', '#notification-dropdown .dropdown-menu', function (e) {
@@ -67,49 +71,51 @@ var ChatApp = {
   activateContact: function() {
     var _this = this;
 
-    $('#contacts .contact').removeClass("active");
-    $(this).addClass("active");
+    if (Helper.hasContact()) {
+      $('#contacts .contact').removeClass("active");
+      $(this).addClass("active");
 
-    var activeContact = Helper.getActiveContact();
-    var authInfo = Helper.getAuthInfo();
+      var activeContact = Helper.getActiveContact();
+      var authInfo = Helper.getAuthInfo();
 
-    var activeContactEl = $('#content .active-contact');
-    $("img", activeContactEl).attr('src', activeContact.picture);
-    $("p", activeContactEl).text(activeContact.fullname);
+      var activeContactEl = $('#content .active-contact');
+      $("img", activeContactEl).attr('src', activeContact.picture);
+      $("p", activeContactEl).text(activeContact.fullname);
 
-    var tmpl = _.template($('#message-tmpl').html());
-    chatApiObj.getConversation(activeContact.id, function(response) {
-      if (response.success) {
-        var conversation = response.conversation;
+      var tmpl = _.template($('#message-tmpl').html());
+      chatApiObj.getConversation(activeContact.id, function(response) {
+        if (response.success) {
+          var conversation = response.conversation;
 
-        $('#messages ul').html("");
-        _.each(conversation, function(convo) {
-          $('#messages ul').append(tmpl({
-            sent: convo.sender.id == authInfo.id,
-            picture: convo.sender.picture,
-            message: convo.message
-          }));
-        });
-
-        ChatApp.get_message_batch = 1; // reset message batch
-        Helper.scrollMessage();
-
-        // clear input message
-        $('#input-message').val("");
-
-        // umn - unread message number
-        var umnEl = $('.wrap .meta .name .unread-message-number', $(_this));
-
-        if (parseInt(umnEl.data("number")) > 0) {
-          chatApiObj.readMessage(activeContact.id, function(readMessageResponse) {
-            if (readMessageResponse.success) {
-              umnEl.data("number", 0);
-              umnEl.text("");
-            }
+          $('#messages ul').html("");
+          _.each(conversation, function(convo) {
+            $('#messages ul').append(tmpl({
+              sent: convo.sender.id == authInfo.id,
+              picture: convo.sender.picture,
+              message: convo.message
+            }));
           });
+
+          ChatApp.get_message_batch = 1; // reset message batch
+          Helper.scrollMessage();
+
+          // clear input message
+          $('#input-message').val("");
+
+          // umn - unread message number
+          var umnEl = $('.wrap .meta .name .unread-message-number', $(_this));
+
+          if (parseInt(umnEl.data("number")) > 0) {
+            chatApiObj.readMessage(activeContact.id, function(readMessageResponse) {
+              if (readMessageResponse.success) {
+                umnEl.data("number", 0);
+                umnEl.text("");
+              }
+            });
+          }
         }
-      }
-    });
+      });
+    }
   },
 
   onAddContact: function() {
@@ -154,6 +160,8 @@ var ChatApp = {
         $(_this).fadeOut(function() {
           $(this).parent().html('<span class="label label-success">Successfully sent request.</span>');
           $(this).remove();
+
+          ChatApp.chat.emitter.sendRequest(to_id);
         });
       }
     });
@@ -171,13 +179,15 @@ var ChatApp = {
         $(_this).fadeOut(function() {
           $(this).closest(".item").find(".item-info p").html(response.notif_message);
           $(this).remove();
+
+          ChatApp.chat.emitter.acceptRequest(from_id);
         });
       }
     });
   },
 
   onReadNotification: function() {
-    var badge_el = $('a span', $(this));
+    var badge_el = $('a .notif-number', $(this));
     var notif_num = badge_el.text();
 
     if (!isNaN(notif_num)) {
@@ -203,7 +213,7 @@ var ChatApp = {
       ChatApp.is_typing = true;
 
       var activeContact = Helper.getActiveContact();
-      chat.emitter.typing(activeContact.id);
+      ChatApp.chat.emitter.typing(activeContact.id);
     }
   },
 
@@ -211,7 +221,7 @@ var ChatApp = {
     ChatApp.is_typing = false;
 
     var activeContact = Helper.getActiveContact();
-    chat.emitter.stopTyping(activeContact.id);
+    ChatApp.chat.emitter.stopTyping(activeContact.id);
   },
 
   onSendMessage: function() {
@@ -247,7 +257,7 @@ var ChatApp = {
 
           Helper.scrollMessage();
 
-          chat.emitter.sendMessage(activeContact.id, message);
+          ChatApp.chat.emitter.sendMessage(activeContact.id, message);
         }
 
         after();

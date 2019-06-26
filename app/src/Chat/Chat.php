@@ -13,7 +13,6 @@ class Chat extends EventHandler implements MessageComponentInterface {
     }
 
     public function onOpen(ConnectionInterface $conn) {
-        // Store the new connection to send messages to later
         parse_str($conn->httpRequest->getUri()->getQuery(), $params);
 
         $authUser = User::findByLoginToken($params['login_token']);
@@ -34,11 +33,18 @@ class Chat extends EventHandler implements MessageComponentInterface {
         echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
             , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
-        $msg = json_decode($msg);
-        $event = $msg->event;
-        unset($msg->event);
+        parse_str($from->httpRequest->getUri()->getQuery(), $params);
+        $authUser = User::findByLoginToken($params['login_token']);
 
-        $this->{$event}($from, $msg);
+        // if authenticated
+        if (!is_null($authUser))
+        {
+            $msg = json_decode($msg);
+            $event = $msg->event;
+            unset($msg->event);
+
+            $this->{$event}($from, $msg);
+        }
     }
 
     public function onClose(ConnectionInterface $conn) {

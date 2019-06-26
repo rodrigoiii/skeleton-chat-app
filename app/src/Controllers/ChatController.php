@@ -65,7 +65,7 @@ class ChatController extends BaseController
         {
             if (!ContactRequest::hasRequest($authUser, $user2))
             {
-                if (!Contact::isContact($authUser, $user2))
+                if (!ContactRequest::areFriends($authUser, $user2))
                 {
                     $is_sent = ContactRequest::send($authUser, $user2);
 
@@ -82,12 +82,12 @@ class ChatController extends BaseController
                 }
                 else
                 {
-                    Log::error("Warning: " . $user2->getFullName() . " is already contact of " . $authUser->getFullName());
+                    Log::warning("Warning: " . $user2->getFullName() . " is already contact of " . $authUser->getFullName());
                 }
             }
             else
             {
-                Log::error("Warning: " . $authUser->getFullName() . " has already request to " . $user2->getFullName());
+                Log::warning("Warning: " . $authUser->getFullName() . " has already request to " . $user2->getFullName());
             }
         }
 
@@ -103,26 +103,33 @@ class ChatController extends BaseController
         $authUser = User::findByLoginToken($login_token);
 
         $from_id = $request->getParam("from_id");
+        $from = User::find($from_id);
 
-        if (!is_null($from_id))
+        if (!is_null($from))
         {
-            $is_accepted = ContactRequest::accept($from_id, $authUser->id);
-            $notif = Notification::acceptRequestType()
-                        ->where("from_id", $from_id)
-                        ->where("to_id", $authUser->id)
-                        ->first();
+            if (ContactRequest::hasRequest($from, $authUser))
+            {
+                if (!ContactRequest::areFriends($from, $authUser))
+                {
+                    $is_accepted = ContactRequest::accept($from, $authUser);
+                    $notif = Notification::acceptRequestType()
+                                ->where("from_id", $from_id)
+                                ->where("to_id", $authUser->id)
+                                ->first();
 
-            return $response->withJson($is_accepted ?
-                [
-                    'success' => true,
-                    'message' => "Successfully accept request.",
-                    'notif_message' => $notif->getMessage($authUser)
-                ] :
-                [
-                    'success' => false,
-                    'message' => "Cannot accept request this time. Please try again later."
-                ]
-            );
+                    return $response->withJson($is_accepted ?
+                        [
+                            'success' => true,
+                            'message' => "Successfully accept request.",
+                            'notif_message' => $notif->getMessage($authUser)
+                        ] :
+                        [
+                            'success' => false,
+                            'message' => "Cannot accept request this time. Please try again later."
+                        ]
+                    );
+                }
+            }
         }
 
         return $response->withJson([

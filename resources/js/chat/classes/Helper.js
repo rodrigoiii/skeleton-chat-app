@@ -14,6 +14,10 @@ var Helper = {
     };
   },
 
+  hasContact: function() {
+    return !$('#contacts ul .contact').hasClass("no-contacts");
+  },
+
   getActiveContact: function() {
     var el = $('#contacts .contact.active');
 
