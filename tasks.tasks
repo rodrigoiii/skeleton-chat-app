@@ -15,3 +15,21 @@ Tasks:
    ☐ Read message - Show that user seen the message
    ✔ On user connect - mark chat status as connected @done (19-06-25 13:41)
    ✔ On user disconnect - mark chat status as disconnected @done (19-06-25 13:41)
+
+Front-end:
+ ☐ Display Contacts
+ ☐ Add contact
+ ☐ Send Message
+ ☐ Load more message
+ ☐ Change active contact
+ ☐ Send request
+ ☐ Accept request
+
+Asynchronous:
+ ☐ Send request to user
+   ☐ Increment notification number
+   ☐ Pre-append request notification
+ ☐ Accept request from sender
+   ☐ Increment notification number
+   ☐ Pre-append accept notification
+   ☐ Pre-append new contact

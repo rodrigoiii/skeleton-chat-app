@@ -97,7 +97,7 @@ class ChatController extends BaseController
         ]);
     }
 
-    public function acceptRequest(Request $request, Response $response)
+   public function acceptRequest(Request $request, Response $response)
     {
         $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);

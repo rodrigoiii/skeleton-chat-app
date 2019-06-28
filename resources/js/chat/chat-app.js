@@ -25,7 +25,7 @@ var ChatApp = {
       port: chatObj.config.port,
       login_token: chatObj.user.login_token
     });
-    ChatApp.chat.connect();
+    // ChatApp.chat.connect();
 
     window.chat = ChatApp.chat; // remove this after development
 
