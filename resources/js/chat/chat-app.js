@@ -28,8 +28,6 @@ var ChatApp = {
     });
     ChatApp.chat.connect();
 
-    window.chat = ChatApp.chat; // remove this after development
-
     $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
     $('#contacts').on("click", ".contact", ChatApp.activateContact);
     $('#addcontact').click(ChatApp.onAddContact);
