@@ -1,3 +1,23 @@
+<script type="text/template" id="contact-list-tmpl">
+    <li class="contact" data-id="<% user_id %>">
+        <div class="wrap">
+            <span class='contact-status <%= online ? 'online' : '' %>'></span>
+            <img src="<%= picture %>" alt="" />
+            <div class="meta">
+                <p class="name">
+                    <b class="fullname"><%= fullname %></b>
+                    <b class="unread-message-number" data-number="<%= unread_message_number %>">
+                        <% if (unread_message_number > 0) { %>
+                            (<%= unread_message_number %>)
+                        <% } %>
+                    </b>
+                </p>
+                <p class="preview"><%= preview_message %></p>
+            </div>
+        </div>
+    </li>
+</script>
+
 <script type="text/template" id="add-contact-tmpl">
     <div class="row">
         <div class="col-md-12">

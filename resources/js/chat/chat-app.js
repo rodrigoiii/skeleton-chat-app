@@ -174,16 +174,34 @@ var ChatApp = {
     $(this).prop('disabled', true);
     $(this).button('loading');
 
-    chatApiObj.acceptRequest(from_id, function(response) {
-      if (response.success) {
-        $(_this).fadeOut(function() {
-          $(this).closest(".item").find(".item-info p").html(response.notif_message);
-          $(this).remove();
+    // assume accept request success
+    var tmpl = _.template($('#contact-list-tmpl').html());
 
-          ChatApp.chat.emitter.acceptRequest(from_id);
-        });
-      }
-    });
+    var contactsEl = $('#contacts ul');
+
+    if ($('.no-contacts', contactsEl).length > 0) {
+      $('.no-contacts', contactsEl).remove();
+    }
+
+    contactsEl.prepend(tmpl({
+      user_id: 1,
+      online: true,
+      picture: "/img/fa-image.png",
+      fullname: "Rodrigo Galura III",
+      unread_message_number: 0,
+      preview_message: "Hello world"
+    }));
+
+    // chatApiObj.acceptRequest(from_id, function(response) {
+    //   if (response.success) {
+    //     $(_this).fadeOut(function() {
+    //       $(this).closest(".item").find(".item-info p").html(response.notif_message);
+    //       $(this).remove();
+
+    //       ChatApp.chat.emitter.acceptRequest(from_id);
+    //     });
+    //   }
+    // });
   },
 
   onReadNotification: function() {
