@@ -1,7 +1,13 @@
 var Helper = {
-  scrollMessage: function(height, callback) {
-    var bottom = height || $('.messages').prop('scrollHeight');
-    $('.messages').animate({ scrollTop: bottom }, "fast", callback);
+  scrollMessage: function(height, animate, callback) {
+    var bottom = height || $('#messages').prop('scrollHeight');
+    animate = animate || true;
+
+    if (animate) {
+      $('#messages').animate({ scrollTop: bottom }, "fast", callback);
+    } else {
+      $('#messages').scrollTop(bottom);
+    }
   },
 
   getAuthInfo: function() {

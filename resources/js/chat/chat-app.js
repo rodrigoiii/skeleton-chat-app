@@ -25,7 +25,7 @@ var ChatApp = {
       port: chatObj.config.port,
       login_token: chatObj.user.login_token
     });
-    // ChatApp.chat.connect();
+    ChatApp.chat.connect();
 
     window.chat = ChatApp.chat; // remove this after development
 
@@ -309,7 +309,6 @@ var ChatApp = {
             // delete load more message
             $("ul li:first-child.load-more", $(_this)).remove();
 
-            // prepend conversation
             _.each(conversation, function(convo) {
               str += tmpl({
                 sent: authInfo.id == convo.sender.id,
@@ -323,7 +322,8 @@ var ChatApp = {
             if (conversation.length === 0) {
               $("ul", $(_this)).prepend('<li class="no-more text-center">No more message.</li>');
             } else {
-              Helper.scrollMessage(5);
+              var ONE_LINE_HEIGHT = 38;
+              Helper.scrollMessage(conversation.length * ONE_LINE_HEIGHT, false);
             }
 
             ChatApp.get_message_batch++;

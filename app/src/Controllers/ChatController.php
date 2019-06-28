@@ -192,10 +192,7 @@ class ChatController extends BaseController
 
         $conversation = Message::conversation($authUser, $user2)
                             ->select(["id", "message", "from_id", "to_id", "created_at"])
-                            ->orderBy('id', "DESC")
-                            ->limit(config('chat.default_conversation_length'))
-                            ->get()
-                            ->sortBy('id');
+                            ->lastNumMessages();
 
         $conversation = transformer($conversation, new ConversationTransformer)->toArray();
 
@@ -218,11 +215,8 @@ class ChatController extends BaseController
 
         $conversation = Message::conversation($authUser, $user2)
                             ->select(["id", "message", "from_id", "to_id", "created_at"])
-                            ->orderBy('id', "DESC")
                             ->offset($default_convo_length * $batch)
-                            ->limit($default_convo_length)
-                            ->get()
-                            ->sortBy('id');
+                            ->lastNumMessages();
 
         $conversation = transformer($conversation, new ConversationTransformer)->toArray();
 

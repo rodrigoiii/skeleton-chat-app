@@ -33,6 +33,14 @@ class Message extends BaseModel
         return $query->where("is_read", $is_read);
     }
 
+    public function scopeLastNumMessages($query, $number=15)
+    {
+        return $query->orderBy('id', "DESC")
+                    ->limit($number)
+                    ->get()
+                    ->sortBy('id');
+    }
+
     public static function conversation(User $from, User $to)
     {
         return static::where(function($query) use($from, $to) {

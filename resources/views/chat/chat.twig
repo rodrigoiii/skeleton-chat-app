@@ -41,7 +41,12 @@
                                                 {% endif %}
                                             </b>
                                         </p>
-                                        <p class="preview">Todo: preview message</p>
+                                        {% set lastMessage = call_user_func_array(["App\\Models\\Message", "conversation"], [authUser, contact]).lastNumMessages().last() %}
+                                        <p class="preview">
+                                            {% if lastMessage is not null %}
+                                                {{ lastMessage.message }}
+                                            {% endif %}
+                                        </p>
                                     </div>
                                 </div>
                             </li>

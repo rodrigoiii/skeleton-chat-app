@@ -17,13 +17,13 @@ Tasks:
    ✔ On user disconnect - mark chat status as disconnected @done (19-06-25 13:41)
 
 Front-end:
- ☐ Display Contacts
+ ✔ Display Contacts @done (19-06-28 14:17)
  ✔ Add contact @done (19-06-28 09:48)
  ✔ Send Message @done (19-06-28 09:48)
  ✔ Load more message @done (19-06-28 09:48)
  ✔ Change active contact @done (19-06-28 09:48)
- ☐ Send request
- ☐ Accept request
+ ✔ Send request @done (19-06-28 10:23)
+ ✔ Accept request @done (19-06-28 10:22)
 
 Asynchronous:
  ☐ Send request to user
