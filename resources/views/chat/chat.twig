@@ -85,35 +85,33 @@
                         <ul class="dropdown-menu dropdown-cart dropdown-menu-right" id="notification-menu">
                             {% if notifications.get().isNotEmpty() %}
                                 {% for notif in notifications.get() %}
-                                    {% set is_send_request = notif.isSendRequest(authUser) %}
+                                    {% set is_send_request_to_auth_user = notif.isSendRequestTo(authUser) %}
+                                    {% set notifUser = notif.getUser(authUser) %}
 
-                                    <li data-from-id="{{ notif.getUser().id }}" data-type="{{ is_send_request ? 'send-request' : 'accept-request' }}">
+                                    <li data-user-id="{{ notifUser.getId() }}" data-type="{{ notif.type }}">
                                         <span class="item">
                                             <span class="item-left">
-                                                <img src="{{ notif.getUser().getPicture(true) }}" alt="" />
+                                                <img src="{{ notifUser.getPicture(true) }}" alt="" />
                                                 <span class="item-info">
                                                     <p>{{ notif.getMessage(authUser) }}</p>
                                                 </span>
                                             </span>
                                             <span class="item-right">
-                                                {% if is_send_request %}
-                                                    <button class="btn btn-info btn-xs accept-request pull-right" data-from-id="{{ notif.from_id }}" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
+                                                {% if is_send_request_to_auth_user %}
+                                                    <button class="btn btn-info btn-xs accept-request pull-right" data-user-id="{{ notifUser.getId() }}" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
                                                 {% endif %}
                                             </span>
                                         </span>
                                     </li>
                                 {% endfor %}
                                     {% set user2 = call_user_func_array(["App\\Models\\User", "find"], [2]) %}
-                                    <li data-from-id="2" data-type="accept-request">
+                                    <li data-user-id="2" data-type="send-request">
                                         <span class="item">
                                             <span class="item-left">
                                                 <img src="{{ user2.getPicture(true) }}" alt="" />
                                                 <span class="item-info">
                                                     <p>{{ user2.getFullName() ~ " has send request to you" }}</p>
                                                 </span>
-                                            </span>
-                                            <span class="item-right">
-                                                <button class="btn btn-info btn-xs accept-request pull-right" data-from-id="{{ user2.getId() }}" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
                                             </span>
                                         </span>
                                     </li>

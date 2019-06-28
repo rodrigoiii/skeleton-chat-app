@@ -1,5 +1,5 @@
 <script type="text/template" id="contact-list-tmpl">
-    <li class="contact" data-id="<% user_id %>">
+    <li class="contact" data-id="<%= user_id %>">
         <div class="wrap">
             <span class='contact-status <%= online ? 'online' : '' %>'></span>
             <img src="<%= picture %>" alt="" />
@@ -46,7 +46,13 @@
                     <% } else if (user.has_pending_request) {  %>
                         <span class="label label-warning">Pending</span>
                     <% } else {  %>
-                        <button class="btn btn-primary btn-xs send-contact-request" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>' data-user-id="<%= user.id %>">
+                        <button class="btn btn-primary btn-xs send-contact-request"
+                            data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'
+                            data-user-id="<%= user.id %>"
+                            data-full-name="<%= user.full_name %>"
+                            data-picture="<%= user.picture %>"
+                            >
+
                             <span class="glyphicon glyphicon-plus-sign"></span> Add Contact
                         </button>
                     <% } %>
@@ -63,7 +69,7 @@
 </script>
 
 <script type="text/template" id="notification-tmpl">
-    <li data-from-id="<%= from_id %>" data-type="<%= type %>">
+    <li data-user-id="<%= user_id %>" data-type="<%= type %>">
         <span class="item">
             <span class="item-left">
                 <img src="<%= picture %>" alt="" />
@@ -72,8 +78,8 @@
                 </span>
             </span>
             <span class="item-right">
-                <% if (type == "send-request") { %>
-                    <button class="btn btn-info btn-xs accept-request pull-right" data-from-id="<%= from_id %>" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
+                <% if (enabled_accept_button) { %>
+                    <button class="btn btn-info btn-xs accept-request pull-right" data-user-id="<%= user_id %>" data-loading-text='<span class="glyphicon glyphicon-refresh rotating"></span>'>Accept</button>
                 <% } %>
             </span>
         </span>

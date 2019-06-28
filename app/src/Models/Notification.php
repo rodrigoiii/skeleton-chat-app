@@ -41,7 +41,7 @@ class Notification extends BaseModel
         return $query->where("to_id", $user->getId());
     }
 
-    public function isSendRequest($userReceiver=null)
+    public function isSendRequestTo($userReceiver=null)
     {
         $result = $this->type === static::SEND_REQUEST;
 
@@ -53,7 +53,7 @@ class Notification extends BaseModel
         return $result;
     }
 
-    public function getUser()
+    public function getUserId(User $owner)
     {
         switch ($this->type)
         {
@@ -107,6 +107,38 @@ class Notification extends BaseModel
 
             case static::CUSTOM:
                 return $this->message;
+
+            default:
+                Log::error("Error getting notification message: Notification type " . $this->type . " is invalid.");
+        }
+
+        return null;
+    }
+
+    public function getUser(User $owner)
+    {
+        $from = User::find($this->from_id);
+        $to = User::find($this->to_id);
+
+        if (is_null($from) || is_null($to))
+        {
+            Log::error("Error on getting message: Neither From ID " . $this->from_id . " nor To ID " . $this->to_id . " is invalid.");
+            return null;
+        }
+
+        switch ($this->type)
+        {
+            case static::SEND_REQUEST:
+            case static::ACCEPT_REQUEST:
+                if ($from->getId() === $owner->getId())
+                {
+                    return $to;
+                }
+
+                if ($to->getId() === $owner->getId())
+                {
+                    return $from;
+                }
 
             default:
                 Log::error("Error getting notification message: Notification type " . $this->type . " is invalid.");

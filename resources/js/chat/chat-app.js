@@ -6,6 +6,7 @@ var _ = require("underscore");
 var Chat = require("./classes/Chat");
 var Helper = require("./classes/Helper");
 var ChatApi = require("./classes/Api");
+var AsyncHandler = require("./classes/AsyncHandler");
 
 /**
  * global object
@@ -30,7 +31,7 @@ var ChatApp = {
     window.chat = ChatApp.chat; // remove this after development
 
     $('#search :input[name="filter-contacts"]').keyup(ChatApp.onFilterContacts);
-    $('#contacts .contact').click(ChatApp.activateContact);
+    $('#contacts').on("click", ".contact", ChatApp.activateContact);
     $('#addcontact').click(ChatApp.onAddContact);
     $('body').on("keyup", '.add-contact-modal :input[name="search_contact"]', _.throttle(ChatApp.onSearchingContact, 800));
     $('body').on('click', ".add-contact-modal .send-contact-request", ChatApp.onSendContactRequest);
@@ -48,8 +49,10 @@ var ChatApp = {
 
     $('#messages').scroll(ChatApp.onLoadMoreMessages);
 
-    // activate first contact
-    $('#contacts .contact:first').click();
+    // activate first contact if exist
+    if ($('#contacts .contact:first').length > 0) {
+      $('#contacts .contact:first').click();
+    }
   },
 
   onFilterContacts: function() {
@@ -150,7 +153,10 @@ var ChatApp = {
   onSendContactRequest: function() {
     var _this = this;
 
+    var authInfo = Helper.getAuthInfo();
     var to_id = $(this).data("user-id");
+    var full_name = $(this).data("full-name");
+    var picture = $(this).data("picture");
 
     $(this).prop('disabled', true);
     $(this).button('loading');
@@ -161,6 +167,21 @@ var ChatApp = {
           $(this).parent().html('<span class="label label-success">Successfully sent request.</span>');
           $(this).remove();
 
+          var tmpl = _.template($('#notification-tmpl').html());
+
+          $('#notification-menu').prepend(tmpl({
+            user_id: to_id,
+            type: AsyncHandler.NOTIFICATION_SEND_REQUEST,
+            picture: picture,
+            notif_message: "You send request to " + full_name,
+            enabled_accept_button: false
+          }));
+
+          // remove empty notification if exist
+          if ($('#notification-menu .empty').length > 0) {
+            $('#notification-menu .empty').remove();
+          }
+
           ChatApp.chat.emitter.sendRequest(to_id);
         });
       }
@@ -169,39 +190,42 @@ var ChatApp = {
 
   onAcceptRequest: function() {
     var _this = this;
-    var from_id = $(this).data("from-id");
+    var requester_id = $(this).data("user-id");
 
     $(this).prop('disabled', true);
     $(this).button('loading');
 
-    // assume accept request success
     var tmpl = _.template($('#contact-list-tmpl').html());
 
     var contactsEl = $('#contacts ul');
 
-    if ($('.no-contacts', contactsEl).length > 0) {
-      $('.no-contacts', contactsEl).remove();
-    }
+    chatApiObj.acceptRequest(requester_id, function(response) {
+      if (response.success) {
+        var requester = response.requester;
 
-    contactsEl.prepend(tmpl({
-      user_id: 1,
-      online: true,
-      picture: "/img/fa-image.png",
-      fullname: "Rodrigo Galura III",
-      unread_message_number: 0,
-      preview_message: "Hello world"
-    }));
+        $(_this).fadeOut(function() {
+          $(this).closest(".item").find(".item-info p").html(response.notif_message);
+          $(this).remove();
 
-    // chatApiObj.acceptRequest(from_id, function(response) {
-    //   if (response.success) {
-    //     $(_this).fadeOut(function() {
-    //       $(this).closest(".item").find(".item-info p").html(response.notif_message);
-    //       $(this).remove();
+          // prepend contact
+          contactsEl.prepend(tmpl({
+            user_id: requester.id,
+            online: requester.online,
+            picture: requester.picture,
+            fullname: requester.full_name,
+            unread_message_number: 0,
+            preview_message: ""
+          }));
 
-    //       ChatApp.chat.emitter.acceptRequest(from_id);
-    //     });
-    //   }
-    // });
+          // remove no contacts if exist
+          if ($('.no-contacts', contactsEl).length > 0) {
+            $('.no-contacts', contactsEl).remove();
+          }
+
+          ChatApp.chat.emitter.acceptRequest(requester.id);
+        });
+      }
+    });
   },
 
   onReadNotification: function() {

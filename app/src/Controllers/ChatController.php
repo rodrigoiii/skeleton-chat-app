@@ -59,15 +59,15 @@ class ChatController extends BaseController
         $authUser = User::findByLoginToken($login_token);
 
         $to_id = $request->getParam("to_id");
-        $user2 = User::find($to_id);
+        $to = User::find($to_id);
 
-        if (!is_null($user2))
+        if (!is_null($to))
         {
-            if (!ContactRequest::hasRequest($authUser, $user2))
+            if (!ContactRequest::hasRequest($authUser, $to))
             {
-                if (!ContactRequest::areFriends($authUser, $user2))
+                if (!ContactRequest::areFriends($authUser, $to))
                 {
-                    $is_sent = ContactRequest::send($authUser, $user2);
+                    $is_sent = ContactRequest::send($authUser, $to);
 
                     return $response->withJson($is_sent ?
                         [
@@ -82,12 +82,12 @@ class ChatController extends BaseController
                 }
                 else
                 {
-                    Log::warning("Warning: " . $user2->getFullName() . " is already contact of " . $authUser->getFullName());
+                    Log::warning("Warning: " . $to->getFullName() . " is already contact of " . $authUser->getFullName());
                 }
             }
             else
             {
-                Log::warning("Warning: " . $authUser->getFullName() . " has already request to " . $user2->getFullName());
+                Log::warning("Warning: " . $authUser->getFullName() . " has already request to " . $to->getFullName());
             }
         }
 
@@ -97,7 +97,7 @@ class ChatController extends BaseController
         ]);
     }
 
-   public function acceptRequest(Request $request, Response $response)
+    public function acceptRequest(Request $request, Response $response)
     {
         $login_token = $request->getParam("login_token");
         $authUser = User::findByLoginToken($login_token);
@@ -121,7 +121,13 @@ class ChatController extends BaseController
                         [
                             'success' => true,
                             'message' => "Successfully accept request.",
-                            'notif_message' => $notif->getMessage($authUser)
+                            'notif_message' => $notif->getMessage($authUser),
+                            'requester' => [
+                                'id' => $from->getId(),
+                                'online' => $from->chatStatus->isOnline(),
+                                'picture' => $from->getPicture(true),
+                                'full_name' => $from->getFullName()
+                            ]
                         ] :
                         [
                             'success' => false,

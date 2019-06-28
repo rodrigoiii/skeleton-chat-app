@@ -149,9 +149,10 @@ class EventHandler
 
                 $return_data = [
                     'event' => __FUNCTION__,
-                    'from' => [
+                    'accepter' => [
                         'id' => $authUser->id,
                         'picture' => $authUser->picture,
+                        'full_name' => $authUser->getFullName(),
                     ],
                     'notif_message' => !is_null($notif) ? $notif->getMessage($authUser) : $notif_placeholder,
                     'receiver_token' => $requestFrom->login_token
