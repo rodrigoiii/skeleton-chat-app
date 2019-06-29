@@ -218,27 +218,36 @@ class EventHandler
 
     public function onSendMessage(ConnectionInterface $from, $msg)
     {
-        parse_str($from->httpRequest->getUri()->getQuery(), $params);
+        $message = $msg->message;
 
-        $authUser = User::findByLoginToken($params['login_token']);
-        $to = User::find($msg->to_id);
-
-        // if client is online
-        if (isset($this->clients[$msg->to_id]))
+        if (strlen($message) > 0 && strlen($message) <= 1000)
         {
-            $return_data = [
-                'event' => __FUNCTION__,
-                'from' => [
-                    'id' => $authUser->id,
-                    'picture' => $authUser->picture,
-                    'message' => $msg->message,
-                    'unread_message_number' => $to->unreadMessage($authUser)->get()->count()
-                ],
-                'receiver_token' => $to->login_token
-            ];
+            parse_str($from->httpRequest->getUri()->getQuery(), $params);
 
-            $toSocket = $this->clients[$msg->to_id];
-            $toSocket->send(json_encode($return_data));
+            $authUser = User::findByLoginToken($params['login_token']);
+            $to = User::find($msg->to_id);
+
+            // if client is online
+            if (isset($this->clients[$msg->to_id]))
+            {
+                $return_data = [
+                    'event' => __FUNCTION__,
+                    'from' => [
+                        'id' => $authUser->id,
+                        'picture' => $authUser->picture,
+                        'message' => $message,
+                        'unread_message_number' => $to->unreadMessage($authUser)->get()->count()
+                    ],
+                    'receiver_token' => $to->login_token
+                ];
+
+                $toSocket = $this->clients[$msg->to_id];
+                $toSocket->send(json_encode($return_data));
+            }
+        }
+        else
+        {
+            echo "Warning: Cannot send message more than 1000 characters.";
         }
     }
 }

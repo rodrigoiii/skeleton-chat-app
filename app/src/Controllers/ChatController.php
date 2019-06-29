@@ -165,28 +165,36 @@ class ChatController extends BaseController
 
     public function sendMessage(Request $request, Response $response, $to_id)
     {
-        $login_token = $request->getParam("login_token");
-        $authUser = User::findByLoginToken($login_token);
-
         $message = $request->getParam("message");
 
-        $sentMessage = $authUser->sendMessage(new Message(compact("message", "to_id")));
-
-        if ($sentMessage instanceof Message)
+        if (strlen($message) > 0 && strlen($message) <= 1000)
         {
+            $login_token = $request->getParam("login_token");
+            $authUser = User::findByLoginToken($login_token);
+
+            $sentMessage = $authUser->sendMessage(new Message(compact("message", "to_id")));
+
+            if ($sentMessage instanceof Message)
+            {
+                return $response->withJson([
+                    'success' => true,
+                    'message' => "Successfully send message.",
+                    'sent_message' => [
+                        'id' => $sentMessage->id,
+                        'message' => $sentMessage->message
+                    ]
+                ]);
+            }
+
             return $response->withJson([
-                'success' => true,
-                'message' => "Successfully send message.",
-                'sent_message' => [
-                    'id' => $sentMessage->id,
-                    'message' => $sentMessage->message
-                ]
+                'success' => false,
+                'message' => "Cannot send message this time. Please try again later."
             ]);
         }
 
         return $response->withJson([
             'success' => false,
-            'message' => "Cannot send message this time. Please try again later."
+            'message' => "You cannot send message more than 1000 characters."
         ]);
     }
 

@@ -58,7 +58,7 @@ class RunChatServerCommand extends BaseCommand
             $host
         );
 
-        $output->writeln("Listening ...");
+        $output->writeln("Listening {$host}:{$port} ...");
 
         $server->run();
     }

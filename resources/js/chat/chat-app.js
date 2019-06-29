@@ -272,10 +272,14 @@ var ChatApp = {
 
     var before = function() {
       if (message !== "") {
-        $('#send-message').prop("disabled", true);
-        $('#send-message').html('<span class="glyphicon glyphicon-refresh rotating"></span>');
+        if (message.length <= 1000) {
+          $('#send-message').prop("disabled", true);
+          $('#send-message').html('<span class="glyphicon glyphicon-refresh rotating"></span>');
 
-        load();
+          load();
+        } else {
+          alert("You cannot send message more than 1000 characters.");
+        }
       }
     };
 

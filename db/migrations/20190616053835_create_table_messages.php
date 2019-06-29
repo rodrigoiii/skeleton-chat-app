@@ -13,7 +13,7 @@ class CreateTableMessages extends AbstractMigration
     public function up()
     {
         $table = $this->table("messages")
-            ->addColumn("message", "text", ['limit' => MysqlAdapter::TEXT_TINY])
+            ->addColumn("message", "text", ['limit' => MysqlAdapter::TEXT_TINY, 'collation' => "utf8mb4_general_ci"])
             ->addColumn("is_read", "boolean", ['default' => 0])
             ->addColumn("from_id", "integer", ['comment' => "Message sender"])
             ->addColumn("to_id", "integer", ['comment' => "Message receiver"])

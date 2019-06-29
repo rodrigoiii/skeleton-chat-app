@@ -8,8 +8,8 @@ return [
     'database' => env("DB_NAME"),
 
     'driver'    => "mysql",
-    'charset'   => "utf8",
-    'collation' => "utf8_unicode_ci",
+    'charset'   => "utf8mb4",
+    'collation' => "utf8mb4_general_ci",
     'prefix'    => "",
 
     'strict' => true,
