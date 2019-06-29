@@ -8,8 +8,6 @@ use Symfony\Component\Console\Output\OutputInterface as Output;
 
 class UpCommand extends BaseCommand
 {
-    const APP_MODE = "up";
-
     /**
      * The command signature.
      *
@@ -22,7 +20,7 @@ class UpCommand extends BaseCommand
      *
      * @var string
      */
-    private $description = "Down the application.";
+    private $description = "Up the application.";
 
     /**
      * Create a new command instance.
@@ -43,11 +41,11 @@ class UpCommand extends BaseCommand
     {
         try {
             if (!$this->isEnvFileExist()) throw new \Exception(".env file is not exist.", 1);
-            if ($this->isAppModeAlreadyUp()) throw new \Exception("Application mode is already ".static::APP_MODE.".", 1);
+            if ($this->isAppStatusAlreadyUp()) throw new \Exception("Application status is already up.", 1);
 
-            $output->writeln($this->upApplicationMode() ?
-                "Application mode is now ".static::APP_MODE."!" :
-                "Cannot ".static::APP_MODE." the application mode"
+            $output->writeln($this->upApplicationStatus() ?
+                "Application status is now up!" :
+                "Cannot up the application status"
             );
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
@@ -60,18 +58,18 @@ class UpCommand extends BaseCommand
         return file_exists($env_path);
     }
 
-    public function isAppModeAlreadyUp()
+    public function isAppStatusAlreadyUp()
     {
-        $old_mode = config("app.mode");
-        return static::APP_MODE === $old_mode;
+        $old_status = config("app.status_up");
+        return $old_status == true;
     }
 
-    public function upApplicationMode()
+    public function upApplicationStatus()
     {
         $env_path = base_path(".env");
-        $old_mode = config("app.mode");
+        $old_status = config("app.status_up") ? "true" : "false";
 
-        file_put_contents($env_path, str_replace("APP_MODE={$old_mode}", "APP_MODE=".static::APP_MODE."", file_get_contents($env_path)));
+        file_put_contents($env_path, str_replace("APP_STATUS_UP={$old_status}", "APP_STATUS_UP=true", file_get_contents($env_path)));
         return true;
     }
 }
