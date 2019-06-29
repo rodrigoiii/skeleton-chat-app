@@ -8,8 +8,6 @@ use Symfony\Component\Console\Output\OutputInterface as Output;
 
 class DownCommand extends BaseCommand
 {
-    const APP_MODE = "down";
-
     /**
      * The command signature.
      *
@@ -43,11 +41,11 @@ class DownCommand extends BaseCommand
     {
         try {
             if (!$this->isEnvFileExist()) throw new \Exception(".env file is not exist.", 1);
-            if ($this->isAppModeAlreadyDown()) throw new \Exception("Application mode is already ".static::APP_MODE.".", 1);
+            if ($this->isAppStatusAlreadyDown()) throw new \Exception("Application status is already down.", 1);
 
-            $output->writeln($this->downApplicationMode() ?
-                "Application mode is now ".static::APP_MODE."!" :
-                "Cannot ".static::APP_MODE." the application mode"
+            $output->writeln($this->downApplicationStatus() ?
+                "Application status is now down!" :
+                "Cannot down the application status"
             );
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
@@ -60,18 +58,18 @@ class DownCommand extends BaseCommand
         return file_exists($env_path);
     }
 
-    public function isAppModeAlreadyDown()
+    public function isAppStatusAlreadyDown()
     {
-        $old_mode = config("app.mode");
-        return static::APP_MODE === $old_mode;
+        $old_status = config("app.status_up");
+        return $old_status == false;
     }
 
-    public function downApplicationMode()
+    public function downApplicationStatus()
     {
         $env_path = base_path(".env");
-        $old_mode = config("app.mode");
+        $old_status = config("app.status_up") ? "true" : "false";
 
-        file_put_contents($env_path, str_replace("APP_MODE={$old_mode}", "APP_MODE=".static::APP_MODE."", file_get_contents($env_path)));
+        file_put_contents($env_path, str_replace("APP_STATUS_UP=true", "APP_STATUS_UP=false", file_get_contents($env_path)));
         return true;
     }
 }
